@@ -15,7 +15,7 @@ The Try class provides convenience methods for executing code and handling error
 ##### Try with null returned on error
 ```java
 import javax.lang.Try
-
+...
 int value = Try.attempt(() -> {
   return 1 + 1;
 });
@@ -24,7 +24,7 @@ System.out.println(value); // prints out 2
 ```
 ```java
 import javax.lang.Try
-
+...
 int value = Try.attempt(() -> {
   return 1 / 0;
 });
@@ -35,7 +35,7 @@ System.out.println(value); // prints out null
 ##### Try / catch with static default value on error
 ```java
 import javax.lang.Try
-
+...
 int value = Try.attempt(() -> {
   return 1 / 0;
 }, 4);
@@ -44,6 +44,10 @@ System.out.println(value); // prints out 4
 ```
 
 ##### Try / catch with function to call on error
+```java
+import javax.lang.Try
+...
+
 int value = Try.attempt(() -> {
   return 1 / 0;
 }, () -> 24);
