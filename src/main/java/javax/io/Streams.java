@@ -1,5 +1,6 @@
 package javax.io;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.InputStream;
@@ -29,6 +30,18 @@ public class Streams {
 	
 	public static String read(InputStream source) throws Exception {
 		return copy(source, new ByteArrayOutputStream()).toString();
+	}
+		
+	public static OutputStream write(byte[] content, OutputStream target) throws Exception {
+		return copy(new ByteArrayInputStream(content), target);
+	}
+	
+	public static OutputStream write(String content, OutputStream target) throws Exception {
+		return write(content.getBytes(), target);
+	}
+	
+	public static void write(InputStream source, OutputStream target) throws Exception {
+		copy(source, target);
 	}
 	
 	public static void close(Closeable... closeables) {
