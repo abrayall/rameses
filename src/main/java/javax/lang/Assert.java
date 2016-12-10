@@ -14,11 +14,19 @@ public class Assert {
 		return check(expected.equals(actual), message);
 	}
 	
-	public static boolean notEquals(Object expected, Object actual) throws Exception {
-		return notEquals(expected, actual, DEFAULT_MESSAGE + ": " + expected.toString() + " is equal to " + actual);
+	public static boolean isEqual(Object expected, Object actual) throws Exception {
+		return equals(expected, actual);
+	}
+
+	public static boolean isEqual(Object expected, Object actual, String message) throws Exception {
+		return equals(expected, actual, message);
 	}
 	
-	public static boolean notEquals(Object expected, Object actual, String message) throws Exception {
+	public static boolean notEqual(Object expected, Object actual) throws Exception {
+		return notEqual(expected, actual, DEFAULT_MESSAGE + ": " + expected.toString() + " is equal to " + actual);
+	}
+	
+	public static boolean notEqual(Object expected, Object actual, String message) throws Exception {
 		return check(expected.equals(actual) == false, message);
 	}
 	
@@ -50,11 +58,11 @@ public class Assert {
 		}
 	}
 	
-	public static boolean check(boolean value) {
+	public static boolean check(boolean value) throws Exception {
 		return check(value, DEFAULT_MESSAGE);
 	}
 	
-	public static boolean check(boolean value, String message) {
+	public static boolean check(boolean value, String message) throws Exception {
 		if (value == false)
 			throw new RuntimeException(message);
 		
