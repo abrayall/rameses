@@ -2,6 +2,7 @@ package javax.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.function.Supplier;
@@ -9,25 +10,6 @@ import java.util.function.Supplier;
 public class List<T> implements java.util.List<T> {
 	
 	protected java.util.List<T> list;
-	
-	@SafeVarargs
-	public static <T> List<T> list(T... items) {
-		return (List<T>) list(new List<T>(), items);
-	}
-	
-	@SafeVarargs
-	public static <T> List<T> of(T... items) {
-		return list(items);
-	}
-	
-	
-	@SafeVarargs
-	public static <T> java.util.List<T> list(java.util.List<T> list, T... items) {
-		for (T item : items)
-			list.add(item);
-		
-		return list;
-	}
 	
 	public List()  {
 		this(new ArrayList<T>());
@@ -222,5 +204,34 @@ public class List<T> implements java.util.List<T> {
 	@Override
 	public java.util.List<T> subList(int fromIndex, int toIndex) {
 		return this.list.subList(fromIndex, toIndex);
+	}
+	
+	public List<T> synchronize() {
+		this.list = Collections.synchronizedList(this.list);
+		return this;
+	}
+	
+	
+	@SafeVarargs
+	public static <T> List<T> list(T... items) {
+		return (List<T>) list(new List<T>(), items);
+	}
+	
+	@SafeVarargs
+	public static <T> List<T> list(java.util.List<T> list, T... items) {
+		return new List<T>(list).append(items);
+	}
+	
+	@SafeVarargs
+	public static <T> List<T> list(Class<T> clazz, T... items) {
+		return new List<T>().append(items);
+	}
+	
+	public static <T> List<T> synchronize(java.util.List<T> list) {
+		return list(Collections.synchronizedList(list));
+	}
+	
+	public static <T> List<T> synchronize(List<T> list) {
+		return list.synchronize();
 	}
 }

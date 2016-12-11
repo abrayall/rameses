@@ -1,7 +1,9 @@
 package javax.util;
 
-import static javax.util.List.*;
-import static javax.lang.Assert.*;
+import static javax.lang.Assert.check;
+import static javax.lang.Assert.isEqual;
+import static javax.util.List.list;
+import static javax.util.List.synchronize;
 
 public class ListTest {
 
@@ -13,10 +15,10 @@ public class ListTest {
 		for (int i = 0; i < list.size(); i++)
 			check(list.get(i) == i);
 		
-		List<String> of = list("0","1","2","3","4","5","6","7","8","9");
-		check(of.size() == 10);
+		List<String> list2 = list("0","1","2","3","4","5","6","7","8","9");
+		check(list2.size() == 10);
 		for (int i = 0; i < list.size(); i++) 
-			isEqual(of.get(i), new Integer(i).toString());
+			isEqual(list2.get(i), new Integer(i).toString());
 		
 		List<Object> mixed = list("1", 2, 3, "foo", new Long(5), new Object());
 		check(mixed.size() == 6);
@@ -35,10 +37,19 @@ public class ListTest {
 		check(list.get(1) == 3);
 		check(list.get(2) == 4);
 		
-		of.delete("0", "1", "2");
-		check(of.size() == 7);
-		check(of.get(0) == "3");
-		checkJavaUtilList(of);
+		list2.delete("0", "1", "2");
+		check(list2.size() == 7);
+		check(list2.get(0) == "3");
+		checkJavaUtilList(list2);
+		
+		isEqual(list(String.class).append("test").get(0), "test");
+		
+		List<String> synced = list(String.class).synchronize();
+		isEqual(synced.list.getClass().getName(), "java.util.Collections$SynchronizedRandomAccessList");
+
+		List<String> synced2 = synchronize(list());
+		isEqual(synced2.list.getClass().getName(), "java.util.Collections$SynchronizedList");
+
 	}
 	
 	public void checkJavaUtilList(List<String> list) throws Exception {
