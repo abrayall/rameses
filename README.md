@@ -9,7 +9,6 @@ Add Rameses to your project now, and start taking advantage of all it has to off
 Download the Rameses jar file and add it to your project's classpath.
 
 ## Documentation
-<br>
 ### Lang Utilities
 #### javax.lang.Try
 The Try class provides convenience methods for executing code and handling errors in a functional way that produces cleaner code than typical try/catch blocks
@@ -143,6 +142,7 @@ List<String> list = list("4", "5", "6").sychronize();
 List<Integer> synced = synchronized(list(1, 2, 3));
 ```
 
+<br>
 #### javax.util.Map
 The Map class provides convenience constructors and 'pimped' java.util.Map wrapper that makes instantiating and working maps much easier!
 
