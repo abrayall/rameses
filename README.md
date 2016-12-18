@@ -1,7 +1,7 @@
 <img src="http://www.clipartlord.com/wp-content/uploads/2013/01/king-tut.png" width="150px" />
 # Rameses - Java 8+ Utility Library
 
-Rameses is a Java 8 (and above) utility library intented to make Java code easier, cleaner and less error prone.  It is lightweight, and has no dependencies!  
+Rameses is a Java 8 (and above) utility library intended to make Java code easier, cleaner and less error prone.  It is lightweight, and has no dependencies!  
 
 Add Rameses to your project now, and start taking advantage of all it has to offer.
 
@@ -9,7 +9,6 @@ Add Rameses to your project now, and start taking advantage of all it has to off
 Download the Rameses jar file and add it to your project's classpath.
 
 ## Documentation
-<br>
 ### Lang Utilities
 #### javax.lang.Try
 The Try class provides convenience methods for executing code and handling errors in a functional way that produces cleaner code than typical try/catch blocks
@@ -143,6 +142,7 @@ List<String> list = list("4", "5", "6").sychronize();
 List<Integer> synced = synchronized(list(1, 2, 3));
 ```
 
+<br>
 #### javax.util.Map
 The Map class provides convenience constructors and 'pimped' java.util.Map wrapper that makes instantiating and working maps much easier!
 
