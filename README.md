@@ -11,7 +11,7 @@ Download the Rameses jar file and add it to your project's classpath.
 ## Documentation
 ### Lang Utilities
 #### javax.lang.Try
-The Try class provides convenience methods for executing code and handling errors in a functional way that produces cleaner code than typical try/catch blocks
+The Try class provides convenience methods for executing code and handling errors in a functional way that produces cleaner code than typical try/catch blocks.
 
 ##### Try with null returned on error
 ```java
@@ -210,7 +210,7 @@ System.out.println(linked.size()); // prints out 2
 <br><br>
 ### I/O Utilities
 #### javax.io.Streams
-The Streams class provides convenience methods for reading, writing and copying streams
+The Streams class provides convenience methods for reading, writing and copying streams.
 
 ##### Read from stream
 ```java
