@@ -37,11 +37,11 @@ public class Streams {
 	}
 	
 	public static OutputStream write(String content, OutputStream target) throws Exception {
-		return write(content.getBytes(), target);
+		return write(new StringInputStream(content), target);
 	}
 	
-	public static void write(InputStream source, OutputStream target) throws Exception {
-		copy(source, target);
+	public static OutputStream write(InputStream source, OutputStream target) throws Exception {
+		return copy(source, target);
 	}
 	
 	public static void close(Closeable... closeables) {
