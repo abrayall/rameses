@@ -181,6 +181,7 @@ System.out.println(longs.get("foobar", 10)); // prints out 10
 
 import java.util.LinkedHashMap;
 import static javax.util.Map.*;
+...
 
 Map<String, String> map = map(new LinkedHashMap<String, String>, 
   entry("foo", "bar"),
@@ -195,7 +196,7 @@ System.out.println(map.keySet()); // prints out "foo", "bar", "something" -- Lin
 ##### Syncronized map
 ```java
 import static javax.util.Map.*;
-
+...
 Map<String, String> map = map(String.class, String.class).synchronize();
 Map<String, String> synced = synchronize(map());
 Map<String, String> linked = map(LinkedHashMap<String, String>, 
@@ -205,3 +206,25 @@ Map<String, String> linked = map(LinkedHashMap<String, String>,
 
 System.out.println(linked.size()); // prints out 2
 ```
+
+<br><br>
+### I/O Utilities
+#### javax.io.Streams
+The Streams class provides convenience methods for reading, writing and copying streams
+
+##### Read from stream
+```java
+import static javax.util.Streams.*;
+...
+
+System.out.println(read(new StringInputStream("foobar")));  // prints out foobar
+```
+
+##### Write to stream
+```java
+import static javax.util.Streams.*;
+...
+
+System.out.println(write("foobar", new StringOutputStream("foobar")).toString());  // prints out foobar
+```
+ 
