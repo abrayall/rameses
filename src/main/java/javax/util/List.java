@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class List<T> implements java.util.List<T> {
@@ -162,6 +163,15 @@ public class List<T> implements java.util.List<T> {
 		this.list.add(index, object);
 		return this;
 	}
+	
+	public List<T> replace(int index, T object) {
+		this.set(index, object);
+		return this;
+	}
+	
+	public List<T> replace(int index, Function<T, T> handler) {
+		return this.replace(index, handler.apply(this.get(index)));
+	}
 
 	@Override
 	public T remove(int index) {
@@ -190,6 +200,10 @@ public class List<T> implements java.util.List<T> {
 	public int lastIndexOf(Object object) {
 		return this.list.lastIndexOf(object);
 	}
+	
+	public int lastIndex() {
+		return this.size() - 1;
+	}
 
 	@Override
 	public ListIterator<T> listIterator() {
@@ -210,7 +224,6 @@ public class List<T> implements java.util.List<T> {
 		this.list = Collections.synchronizedList(this.list);
 		return this;
 	}
-	
 	
 	@SafeVarargs
 	public static <T> List<T> list(T... items) {
