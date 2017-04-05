@@ -33,6 +33,10 @@ public class File {
 		this.file = file;
 	}
 	
+	public String name() {
+		return this.file.getName();
+	}
+	
 	public boolean exists() {
 		return this.exists();
 	}
@@ -55,6 +59,10 @@ public class File {
 			this.file.getParentFile().mkdirs();
 		
 		return this;
+	}
+	
+	public File parent() throws Exception {
+		return file(file.getAbsoluteFile().getParent());
 	}
 	
 	public InputStream inputStream() throws Exception {
@@ -117,7 +125,7 @@ public class File {
 		
 		public FileWatcher watch() throws Exception {
 			this.service = this.file.toPath().getFileSystem().newWatchService();
-			this.file.toPath().getParent().register(service, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
+			this.file.parent().toPath().register(service, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
 			this.start();
 			return this;
 		}
@@ -171,5 +179,17 @@ public class File {
 			  success.accept(this);
 			}, () -> failure.accept(this));
 		}
+	}
+	
+	public static File file(String path) {
+		return new File(path);
+	}
+	
+	public File file(java.io.File directory, String name) {
+		return new File(directory, name);
+	}
+	
+	public File file(java.io.File file) {
+		return new File(file);
 	}
 }
