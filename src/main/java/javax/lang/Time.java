@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 public class Time {
 
 	public static long now() {
-		return System.currentTimeMillis();
+		return java.lang.System.currentTimeMillis();
 	}
 	
 	public static void sleep(int seconds) {
