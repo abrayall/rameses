@@ -183,7 +183,7 @@ import java.util.LinkedHashMap;
 import static javax.util.Map.*;
 ...
 
-Map<String, String> map = map(new LinkedHashMap<String, String>, 
+Map<String, String> map = map(new LinkedHashMap<String, String>,
   entry("foo", "bar"),
   entry("bar", "foo"),
   entry("something", "nothing")
@@ -199,7 +199,7 @@ import static javax.util.Map.*;
 ...
 Map<String, String> map = map(String.class, String.class).synchronize();
 Map<String, String> synced = synchronize(map());
-Map<String, String> linked = map(LinkedHashMap<String, String>, 
+Map<String, String> linked = map(LinkedHashMap<String, String>,
   entry("foo", "bar"),
   entry("bar", "foo")
 ).synchronize();
@@ -214,7 +214,7 @@ The Streams class provides convenience methods for reading, writing and copying 
 
 ##### Read from stream
 ```java
-import static javax.util.Streams.*;
+import static javax.io.Streams.*;
 ...
 
 System.out.println(read(new StringInputStream("foobar")));  // prints out foobar
@@ -222,9 +222,68 @@ System.out.println(read(new StringInputStream("foobar")));  // prints out foobar
 
 ##### Write to stream
 ```java
-import static javax.util.Streams.*;
+import static javax.io.Streams.*;
 ...
 
 System.out.println(write("foobar", new StringOutputStream("foobar")).toString());  // prints out foobar
 ```
- 
+#### javax.io.File
+The File class provides convenience methods for creating, deleting, reading, writing, locking and watching files on the filsystem.
+
+###### Create a file
+```java
+import javax.io.File.*;
+...
+
+file("test.txt").create();
+```
+
+##### Delete a file
+```java
+import javax.io.File.*;
+...
+
+file("test.txt").delete();
+```
+
+##### Reads a file into a string
+```java
+import javax.io.File.*;
+...
+
+String contents = file("test.txt").read();
+```
+
+#### Writes a string to a file
+```java
+import javax.io.File.*;
+...
+
+file("test.txt").write("hello world");
+```
+
+#### Writes and reads a string to a file
+```java
+import javax.io.File.*;
+...
+
+System.out.println(file("test.txt").write("hello world").read());  //prints out hello word
+```
+
+#### Locks a file from being accessed by other processes
+```java
+import javax.io.File.*;
+...
+
+file("test.txt").create().lock(lock -> System.out.println("got lock"), lock -> System.out.println("did not get lock"));
+```
+
+#### Watches a file for changes
+```java
+import javax.io.File.*;
+...
+
+File file = file("test.txt").create().write("foo").watch((file, action) -> System.out.println(file.name() + " - " + action));
+file.write("test");  //prints out test.txt - modify
+file.delete(); //prints out test.txt - delete
+```
