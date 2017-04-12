@@ -55,6 +55,12 @@ public class List<T> implements java.util.List<T> {
 		return this.list.add(object);
 	}
 	
+	public boolean addIfNotNull(T object) {
+		if (object != null)
+			return this.list.add(object);	
+		return false;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public boolean add(T... objects) {
 		for (T object : objects) 
