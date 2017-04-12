@@ -133,6 +133,11 @@ public class Map<K, V> implements java.util.Map<K, V> {
 		this.map = Collections.synchronizedMap(this.map);
 		return this;
 	}
+	
+	@Override
+	public String toString() {
+		return this.map.toString();
+	}
 
 	@SafeVarargs
 	public static <K, V> Map<K,V> map(Entry<K, V>... entries) {
