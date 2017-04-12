@@ -130,6 +130,11 @@ public class List<T> implements java.util.List<T> {
 		this.clear();
 		return this;
 	}
+	
+	@Override
+	public String toString() {
+		return this.list.toString();
+	}
 
 	@Override
 	public T get(int index) {  
