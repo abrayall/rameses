@@ -135,8 +135,11 @@ public class File {
 				Try.attempt(() -> {
 					WatchKey key = service.take();
 					for (WatchEvent<?> event : key.pollEvents()) {
-						if (Path.class.isInstance(event.context()))
-							Try.attempt(() -> callback.accept(this.file, event.kind().toString().toLowerCase().replace("entry_", "")));
+						if (Path.class.isInstance(event.context())) {
+							Path context = (Path) event.context();
+							if (context.getFileName().toString().equals(this.file.name()))
+								Try.attempt(() -> callback.accept(this.file, event.kind().toString().toLowerCase().replace("entry_", "")));
+						}
 					}
 					
 					key.reset();
