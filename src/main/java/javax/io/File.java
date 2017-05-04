@@ -117,6 +117,7 @@ public class File {
 		private File file;
 		private BiConsumer<File, String> callback;
 		private WatchService service;
+		private Boolean running = false;
 		
 		public FileWatcher(File file, BiConsumer<File, String> callback) {
 			this.file = file;
@@ -125,13 +126,14 @@ public class File {
 		
 		public FileWatcher watch() throws Exception {
 			this.service = this.file.toPath().getFileSystem().newWatchService();
-			this.file.parent().toPath().register(service, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
+			this.file.parent().toPath().register(service, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
 			this.start();
 			return this;
 		}
 		
 		public void run() {
-			while(true) {
+			this.running = true;
+			while(this.running) {
 				Try.attempt(() -> {
 					WatchKey key = service.take();
 					for (WatchEvent<?> event : key.pollEvents()) {
@@ -145,6 +147,11 @@ public class File {
 					key.reset();
 				});
 			}
+		}
+		
+		public void halt() throws Exception {
+			this.service.close();
+			this.running = false;
 		}
 	}
 	
