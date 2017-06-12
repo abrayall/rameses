@@ -144,7 +144,7 @@ public class List<T> implements java.util.List<T> {
 
 	@Override
 	public T get(int index) {  
-		return this.list.get(index);
+		return this.list.size() > 0 ? this.list.get(index) : null;
 	}
 	
 	public T get(int index, T defaultValue) {
@@ -214,6 +214,14 @@ public class List<T> implements java.util.List<T> {
 	
 	public int lastIndex() {
 		return this.size() - 1;
+	}
+	
+	public T last() {
+		return this.list.get(this.lastIndex());
+	}
+	
+	public T first() {
+		return this.list.get(0);
 	}
 
 	@Override

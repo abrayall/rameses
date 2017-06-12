@@ -9,6 +9,8 @@ public class ListTest {
 
 	public void testList() throws Exception {
 		check(list().size() == 0);
+		check(list().first() == null);
+		check(list().last() == null);
 		
 		List<Integer> list = list(0,1,2,3,4,5,6,7,8,9);
 		check(list.size() == 10);
@@ -27,6 +29,8 @@ public class ListTest {
 		list.append(1);
 		list.add(2,3,4,5);
 		check(list.size() == 15);
+		check(list.first() == 0);
+		check(list.last() == 5);
 		
 		check(list.get(1) == 1);
 		check(list.get(14) == 5);
