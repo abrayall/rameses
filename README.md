@@ -85,8 +85,9 @@ The Runtime class provides methods for executing command line executables and ot
 ````java
 import javax.io.Streams;
 import static javax.lang.Runtime.*;
+...
 
-System.out.println(Strems.read(execute("echo 4").getInputStream()) // prints out 4
+System.out.println(Streams.read(execute("echo 4").getInputStream())) // prints out 4
 ````
 
 <br><br>
