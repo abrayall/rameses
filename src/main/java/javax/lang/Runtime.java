@@ -1,12 +1,16 @@
 package javax.lang;
 
+import static javax.util.Map.map;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import static javax.util.Map.*;
-
 public class Runtime {
+	public static Process execute(String... command) throws IOException {
+		return execute(new File("."), command);
+	}
+	
 	public static Process execute(File directory, String... command) throws IOException {
 		return execute(map(), directory, command);
 	}
