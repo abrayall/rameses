@@ -11,6 +11,27 @@ Download the Rameses jar file and add it to your project's classpath.
 
 ## Documentation
 ### Lang Utilities
+#### javax.lang.System
+The System class provides convenience methods for printing out values to the console and getting the current system time
+
+##### Printing out values
+```java
+import static javax.lang.System.*;
+...
+
+println("Hello World")  // prints out Hello World
+```
+
+##### Getting system time
+```java
+import static javax.lang.System.*;
+...
+
+println(now())  // prints out current time (1492121352021)
+```
+
+<br>
+
 #### javax.lang.Try
 The Try class provides convenience methods for executing code and handling errors in a functional way that produces cleaner code than typical try/catch blocks.
 
