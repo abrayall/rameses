@@ -31,6 +31,10 @@ public class File {
 		this(new java.io.File(path));
 	}
 	
+	public File(File directory, String name) {
+		this(directory.file, name);
+	}
+	
 	public File(java.io.File directory, String name) {
 		this(new java.io.File(directory, name));
 	}
@@ -76,7 +80,6 @@ public class File {
 		return this;
 	}
 	
-	
 	public File copy(String source) throws Exception {
 		return this.copy(new java.io.File(source));
 	}
@@ -106,6 +109,7 @@ public class File {
 	}
 	
 	public List<File> list(Function<File, Boolean> filter) throws Exception {
+		if (this.file.exists() == false) return List.list();
 		return List.list(Arrays.stream(this.file.listFiles()).map(file -> {
 			return new File(file);	
 		}).filter(file -> filter.apply(file)).collect(Collectors.toList()));
@@ -159,19 +163,19 @@ public class File {
 	}
 
 	public File synchronize(File target) throws Exception {
-		this.synchonizer(target).synchronize();
+		this.synchronizer(target).synchronize();
 		return this;
 	}
 
 	public FileSynchronizer synchonizer(String target) {
-		return this.synchonizer(new java.io.File(target));
+		return this.synchronizer(new java.io.File(target));
 	}
 	
-	public FileSynchronizer synchonizer(java.io.File target) {
-		return this.synchonizer(new File(target));
+	public FileSynchronizer synchronizer(java.io.File target) {
+		return this.synchronizer(new File(target));
 	}
 	
-	public FileSynchronizer synchonizer(File target) {
+	public FileSynchronizer synchronizer(File target) {
 		return new FileSynchronizer(this, target);
 	}
 	
@@ -278,17 +282,38 @@ public class File {
 		}
 		
 		public FileSynchronizer synchronize() throws Exception {
-			this.source.list().forEach(file -> handle(file, resolve(file, this.source, this.target)));
-			this.target.list().forEach(file -> handle(resolve(file, this.target, this.source), file));
+			return this.synchronize(true);
+		}
+		
+		public FileSynchronizer synchronize(boolean continous) throws Exception {
+			this.once();
+			if (continous)
+				this.watch();
 			
-			this.watcher = this.source.watcher((file, operation) -> {
-				handle(source, resolve(source, this.source, this.target), operation.equals("create") ? "add" : operation);				
-			}).watch();
 			return this;
 		}
 		
+		public FileSynchronizer once() throws Exception {
+			this.source.list().forEach(file -> handle(file, resolve(file, this.source, this.target)));
+			this.target.list().forEach(file -> handle(resolve(file, this.target, this.source), file));
+			return this;
+		}
+		
+		public FileSynchronizer watch() throws Exception {
+			this.watcher = this.watcher().watch();
+			return this;
+		}
+		
+		public FileWatcher watcher() throws Exception {
+			return this.source.watcher((file, operation) -> {
+				handle(source, resolve(source, this.source, this.target), operation.equals("create") ? "add" : operation);				
+			});
+		}
+		
 		public FileSynchronizer halt() throws Exception {
-			this.watcher.halt();
+			if (this.watcher != null)
+				this.watcher.halt();
+			
 			return this;
 		}
 		
