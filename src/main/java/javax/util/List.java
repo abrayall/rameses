@@ -8,6 +8,8 @@ import java.util.ListIterator;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class List<T> implements java.util.List<T> {
 	
@@ -279,6 +281,10 @@ public class List<T> implements java.util.List<T> {
 	@SafeVarargs
 	public static <T> List<T> list(Class<T> clazz, T... items) {
 		return new List<T>().append(items);
+	}
+	
+	public static <T> List<T> list(Stream<T> stream) {
+		return new List<T>(stream.collect(Collectors.toList()));
 	}
 	
 	public static <T> List<T> synchronize(java.util.List<T> list) {
