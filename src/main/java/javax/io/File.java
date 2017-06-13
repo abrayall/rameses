@@ -14,10 +14,14 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.lang.Try;
+import javax.util.List;
 
 public class File {
 	
@@ -44,11 +48,19 @@ public class File {
 	}
 	
 	public boolean exists() {
-		return this.exists();
+		return this.file.exists();
 	}
 	
 	public String type() {
 		return this.file.isDirectory() ? "directory" : "file";
+	}
+	
+	public long size() {
+		return this.file.length();
+	}
+	
+	public long modified() {
+		return this.file.lastModified();
 	}
 	
 	public File create() throws Exception {
@@ -87,6 +99,16 @@ public class File {
 	
 	public File parent() throws Exception {
 		return file(file.getAbsoluteFile().getParent());
+	}
+	
+	public List<File> list() throws Exception {
+		return this.list(file -> true);
+	}
+	
+	public List<File> list(Function<File, Boolean> filter) throws Exception {
+		return List.list(Arrays.stream(this.file.listFiles()).map(file -> {
+			return new File(file);	
+		}).filter(file -> filter.apply(file)).collect(Collectors.toList()));
 	}
 	
 	public InputStream inputStream() throws Exception {
@@ -256,14 +278,11 @@ public class File {
 		}
 		
 		public FileSynchronizer synchronize() throws Exception {
-			this.watcher = this.source.watcher((source, operation) -> {
-				File target = new File(source.path().replace(this.source.toPath().normalize().toFile().getAbsolutePath(), this.target.toPath().normalize().toFile().getAbsolutePath()));
-				System.out.println(operation + " " + target);
-				if (operation.equals("create") || operation.equals("modify"))
-					Try.attempt(() -> target.copy(source));
-				else if (operation.equals("delete"))
-					Try.attempt(() -> target.delete());
-					
+			this.source.list().forEach(file -> handle(file, resolve(file, this.source, this.target)));
+			this.target.list().forEach(file -> handle(resolve(file, this.target, this.source), file));
+			
+			this.watcher = this.source.watcher((file, operation) -> {
+				handle(source, resolve(source, this.source, this.target), operation.equals("create") ? "add" : operation);				
 			}).watch();
 			return this;
 		}
@@ -271,6 +290,30 @@ public class File {
 		public FileSynchronizer halt() throws Exception {
 			this.watcher.halt();
 			return this;
+		}
+		
+		protected void handle(File source, File target) {
+			if (source.exists() && target.exists() == false)
+				handle(source, target, "add");
+			else if (source.exists() == false && target.exists())
+				handle(source, target, "delete");
+			else if (source.exists() && target.exists() && (source.size() != target.size() || source.modified() != target.modified()))
+				handle(source, target, "modify");
+		}
+		
+		protected void handle(File source, File target, String operation) {
+			if (operation.equals("add") || operation.equals("modify"))
+				Try.attempt(() -> target.copy(source));
+			else if (operation.equals("delete"))
+				Try.attempt(() -> target.delete());
+		}
+		
+		protected File resolve(File file, File source, File target) {
+			return new File(normalize(file).replace(normalize(source), normalize(target)));
+		}
+		
+		protected String normalize(File file) {
+			return file.toPath().normalize().toFile().getAbsolutePath();
 		}
 	}
 	
@@ -287,6 +330,6 @@ public class File {
 	}
 	
 	public static void main(String[] arguments) throws Exception {
-		new File(".").synchronize("/tmp");
+		new File(".").synchronize("/tmp/test");
 	}
 }
