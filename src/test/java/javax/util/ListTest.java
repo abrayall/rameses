@@ -53,7 +53,6 @@ public class ListTest {
 
 		List<String> synced2 = synchronize(list());
 		isEqual(synced2.list.getClass().getName(), "java.util.Collections$SynchronizedList");
-
 	}
 	
 	public void checkJavaUtilList(List<String> list) throws Exception {

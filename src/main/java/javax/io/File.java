@@ -6,7 +6,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
@@ -37,8 +39,16 @@ public class File {
 		return this.file.getName();
 	}
 	
+	public String path() {
+		return this.file.getAbsolutePath();
+	}
+	
 	public boolean exists() {
 		return this.exists();
+	}
+	
+	public String type() {
+		return this.file.isDirectory() ? "directory" : "file";
 	}
 	
 	public File create() throws Exception {
@@ -51,6 +61,20 @@ public class File {
 		if (this.file.delete() == false)
 			throw new Exception("Failed to delete file");
 		
+		return this;
+	}
+	
+	
+	public File copy(String source) throws Exception {
+		return this.copy(new java.io.File(source));
+	}
+	
+	public File copy(java.io.File source) throws Exception {
+		return this.copy(new File(file));
+	}
+	
+	public File copy(File source) throws Exception {
+		Files.copy(source.toPath(), this.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
 		return this;
 	}
 	
@@ -104,6 +128,35 @@ public class File {
 		return new FileWatcher(this, callback);
 	}
 	
+	public File synchronize(String target) throws Exception {
+		return this.synchronize(new java.io.File(target));
+	}
+	
+	public File synchronize(java.io.File target) throws Exception {
+		return this.synchronize(new File(target));
+	}
+
+	public File synchronize(File target) throws Exception {
+		this.synchonizer(target).synchronize();
+		return this;
+	}
+
+	public FileSynchronizer synchonizer(String target) {
+		return this.synchonizer(new java.io.File(target));
+	}
+	
+	public FileSynchronizer synchonizer(java.io.File target) {
+		return this.synchonizer(new File(target));
+	}
+	
+	public FileSynchronizer synchonizer(File target) {
+		return new FileSynchronizer(this, target);
+	}
+	
+	public String toString() {
+		return this.path();
+	}
+	
 	public java.io.File toFile() {
 		return this.file;
 	}
@@ -139,8 +192,8 @@ public class File {
 					for (WatchEvent<?> event : key.pollEvents()) {
 						if (Path.class.isInstance(event.context())) {
 							Path context = (Path) event.context();
-							if (context.getFileName().toString().equals(this.file.name()))
-								Try.attempt(() -> callback.accept(this.file, event.kind().toString().toLowerCase().replace("entry_", "")));
+							if (context.getFileName().toString().equals(this.file.name()) || this.file.file.isDirectory() == true)
+								Try.attempt(() -> callback.accept(this.file.file.isDirectory() == true ? new File(context.getFileName().toString()) : this.file, event.kind().toString().toLowerCase().replace("entry_", "")));
 						}
 					}
 					
@@ -191,6 +244,36 @@ public class File {
 		}
 	}
 	
+	public class FileSynchronizer {
+		
+		private File source;
+		private File target;
+		private FileWatcher watcher;
+		
+		public FileSynchronizer(File source, File target) {
+			this.source = source;
+			this.target = target;
+		}
+		
+		public FileSynchronizer synchronize() throws Exception {
+			this.watcher = this.source.watcher((source, operation) -> {
+				File target = new File(source.path().replace(this.source.toPath().normalize().toFile().getAbsolutePath(), this.target.toPath().normalize().toFile().getAbsolutePath()));
+				System.out.println(operation + " " + target);
+				if (operation.equals("create") || operation.equals("modify"))
+					Try.attempt(() -> target.copy(source));
+				else if (operation.equals("delete"))
+					Try.attempt(() -> target.delete());
+					
+			}).watch();
+			return this;
+		}
+		
+		public FileSynchronizer halt() throws Exception {
+			this.watcher.halt();
+			return this;
+		}
+	}
+	
 	public static File file(String path) {
 		return new File(path);
 	}
@@ -201,5 +284,9 @@ public class File {
 	
 	public File file(java.io.File file) {
 		return new File(file);
+	}
+	
+	public static void main(String[] arguments) throws Exception {
+		new File(".").synchronize("/tmp");
 	}
 }

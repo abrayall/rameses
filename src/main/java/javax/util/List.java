@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -241,6 +242,27 @@ public class List<T> implements java.util.List<T> {
 	
 	public List<T> synchronize() {
 		this.list = Collections.synchronizedList(this.list);
+		return this;
+	}
+	
+	public List<T> diff(java.util.List<T> target, BiConsumer<T, String> handler) {
+		return this.diff(list(target), handler);
+	}
+	
+	public List<T> diff(List<T> target, BiConsumer<T, String> handler) {
+		target.forEach(item -> {
+			T other = this.list.contains(item) ? target.get(target.indexOf(item)) : null;
+			if (other == null)
+				handler.accept(item, "add");
+			else if (other.equals(item) == false)
+				handler.accept(item, "modify");
+		});
+		
+		this.list.forEach(item -> {
+			if (target.contains(item) == false)
+				handler.accept(item, "delete");
+		});
+		
 		return this;
 	}
 	
