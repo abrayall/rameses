@@ -1,5 +1,10 @@
 package javax.lang;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.util.List;
+
 public class Strings {
 	
 	public static String string(Object object) {
@@ -104,5 +109,18 @@ public class Strings {
 		}
 		
 		return strings;
+	}
+	
+	public static String[] extract(String string, String pattern) {
+		List<String> tokens = List.list();
+		Matcher matcher = Pattern.compile(pattern).matcher(string);
+		while (matcher.find())
+			tokens.add(matcher.group(1));
+		
+		return tokens.toArray(new String[0]);
+	}
+	
+	public static String[] extract(String string, String start, String end) {
+		return extract(string, "\\" + start + "(.*?)" + "\\" + end);
 	}
 }

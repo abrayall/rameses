@@ -68,6 +68,19 @@ public class StringsTest {
 		Assert.equals("t\ne\ns\nt", Strings.block("test", 1));
 	}
 	
+	public void testExtract() throws Exception {
+		String[] tokens = Strings.extract("this is a {test}, {test} {bar}", "{", "}");
+		Assert.equals(3, tokens.length);
+		Assert.equals("test", tokens[0]);
+		Assert.equals("test", tokens[1]);
+		Assert.equals("bar", tokens[2]);
+		
+		tokens = Strings.extract("this is a [test], {test} [bar]", "\\[(.*?)\\]");
+		Assert.equals(2, tokens.length);
+		Assert.equals("test", tokens[0]);
+		Assert.equals("bar", tokens[1]);
+	}
+	
 	public static void main(String[] arguments) throws Exception {
 		StringsTest test = new StringsTest();
 		test.testString();
@@ -79,5 +92,6 @@ public class StringsTest {
 		test.testBlock();
 		test.testTruncate();
 		test.testGenerate();
+		test.testExtract();
 	}
 }
