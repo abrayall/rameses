@@ -19,6 +19,14 @@ public class Runtime {
 		return process(environment, directory, command).start();
 	}
 	
+	public static ProcessBuilder process(String... command) throws IOException {
+		return process(new File("."), command);
+	}
+	
+	public static ProcessBuilder process(File directory, String... command) throws IOException {
+		return process(map(), directory, command);
+	}
+	
 	public static ProcessBuilder process(Map<String, String> environment, File directory, String... command) throws IOException {
 		ProcessBuilder builder = new ProcessBuilder(command);
 		builder.directory(directory);
