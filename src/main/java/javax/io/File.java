@@ -14,6 +14,7 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -275,6 +276,7 @@ public class File {
 		private File source;
 		private File target;
 		private FileWatcher watcher;
+		private List<BiConsumer<File, String>> listeners = List.list(new ArrayList<BiConsumer<File, String>>());
 		
 		public FileSynchronizer(File source, File target) {
 			this.source = source;
@@ -302,6 +304,11 @@ public class File {
 			return this.source.watcher((file, operation) -> {
 				handle(source, resolve(source, this.source, this.target), operation.equals("create") ? "add" : operation);				
 			});
+		}
+		
+		public FileSynchronizer listen(BiConsumer<File, String> listener) {
+			this.listeners.add(listener);
+			return this;
 		}
 		
 		public FileSynchronizer halt() throws Exception {
@@ -333,6 +340,8 @@ public class File {
 				Try.attempt(() -> target.copy(source));
 			else if (operation.equals("delete"))
 				Try.attempt(() -> target.delete());
+			
+			this.notify(source, operation);
 		}
 		
 		protected File resolve(File file, File source, File target) {
@@ -341,6 +350,11 @@ public class File {
 		
 		protected String normalize(File file) {
 			return file.toPath().normalize().toFile().getAbsolutePath();
+		}
+		
+		protected void notify(File file, String operation) {
+			for (BiConsumer<File, String> listener : this.listeners)
+				Try.attempt(() -> listener.accept(file, operation));
 		}
 	}
 	
