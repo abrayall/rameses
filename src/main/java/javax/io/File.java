@@ -286,16 +286,10 @@ public class File {
 		}
 		
 		public FileSynchronizer synchronize(boolean continous) throws Exception {
-			this.once();
+			this.synchronize(this.source, this.target);
 			if (continous)
 				this.watch();
 			
-			return this;
-		}
-		
-		public FileSynchronizer once() throws Exception {
-			this.source.list().forEach(file -> handle(file, resolve(file, this.source, this.target)));
-			this.target.list().forEach(file -> handle(resolve(file, this.target, this.source), file));
 			return this;
 		}
 		
@@ -317,7 +311,15 @@ public class File {
 			return this;
 		}
 		
-		protected void handle(File source, File target) {
+		protected FileSynchronizer synchronize(File source, File target) throws Exception {
+			source.list().forEach(file -> Try.attempt(() -> handle(file, resolve(file, this.source, this.target))));
+			target.list().forEach(file -> Try.attempt(() -> handle(resolve(file, this.target, this.source), file)));
+			return this;
+		}
+		
+		protected void handle(File source, File target) throws Exception {
+			if (source.file.isDirectory() && target.file.isDirectory())
+				synchronize(source, target);
 			if (source.exists() && target.exists() == false)
 				handle(source, target, "add");
 			else if (source.exists() == false && target.exists())
