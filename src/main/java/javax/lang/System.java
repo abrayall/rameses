@@ -30,4 +30,28 @@ public class System {
 	public static long now() {
 		return java.lang.System.currentTimeMillis();
 	}
+	
+	public static String operatingSystem() {
+		return java.lang.System.getProperty("os.name").toLowerCase();
+	}
+
+	public static boolean isWindows() {
+        return operatingSystem().indexOf("win") >= 0;
+    }
+
+	public static boolean isMac() {
+        return operatingSystem().indexOf("mac") >= 0;
+    }
+
+	public static boolean isUnix() {
+        return operatingSystem().indexOf("nux") >= 0;
+    }
+	
+	public static boolean isSolaris() {
+		return operatingSystem().contains("solaris") || operatingSystem().contains("sunos");
+	}
+	
+	public static boolean isAndroid() {
+		return java.lang.System.getProperty("os.name").toLowerCase().contains("android");
+	}
 }
