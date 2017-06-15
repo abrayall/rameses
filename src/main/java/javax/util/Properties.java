@@ -23,6 +23,10 @@ public class Properties extends java.util.Properties {
 		this.set(values);
 	}
 	
+	public Properties(Property... properties) {
+		this.set(properties);
+	}
+	
 	public Properties(Map<Object, Object> values) {
 		this.set(values);
 	}
@@ -42,6 +46,10 @@ public class Properties extends java.util.Properties {
 	@SuppressWarnings("unchecked")
 	public Properties(File file, Map.Entry<Object, Object>... defaultValues) {
 		this(file, Map.map(defaultValues));
+	}
+	
+	public Properties(File file, Property... defaultValues) {
+		this(file, properties(defaultValues));
 	}
 
 	public Properties(String url) {
@@ -65,6 +73,10 @@ public class Properties extends java.util.Properties {
 		this(url, Map.map(defaultValues));
 	}
 	
+	public Properties(URL url, Property... defaultValues) {
+		this(url, properties(defaultValues));
+	}
+	
 	public Properties(InputStream stream) {
 		this(stream, Map.map());
 	}
@@ -81,6 +93,10 @@ public class Properties extends java.util.Properties {
 	public Properties(InputStream stream, Map.Entry<Object, Object>... defaultValues) {
 		this.load(stream, properties(defaultValues));
 	}
+
+	public Properties(InputStream stream, Property... defaultValues) {
+		this.load(stream, properties(defaultValues));
+	}
 	
 	public Properties(Callable<InputStream> stream, Map<Object, Object> defaultValues) {
 		this(stream, properties(defaultValues));
@@ -95,7 +111,11 @@ public class Properties extends java.util.Properties {
 	public Properties(Callable<InputStream> stream, Map.Entry<Object, Object>... defaultValues) {
 		this(stream, Map.map(defaultValues));
 	}
-	
+
+	public Properties(Callable<InputStream> stream, Property... defaultValues) {
+		this(stream, properties(defaultValues));
+	}
+
 	public Properties empty() {
 		this.clear();
 		return this;
@@ -113,7 +133,10 @@ public class Properties extends java.util.Properties {
 		return this.set(Map.map(values));
 	}
 	
-	
+	public Properties set(Property... properties) {
+		return this.set(properties(properties));
+	}
+		
 	public Properties set(Properties properties) {
 		for (Object key : properties.keySet())
 			this.put(key, properties.get(key));
@@ -131,7 +154,11 @@ public class Properties extends java.util.Properties {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Properties load(InputStream stream, Map.Entry<Object, Object> defaultValues) {
+	public Properties load(InputStream stream, Map.Entry<Object, Object>... defaultValues) {
+		return load(stream, properties(defaultValues));
+	}
+	
+	public Properties load(InputStream stream, Property... defaultValues) {
 		return load(stream, properties(defaultValues));
 	}
 	
@@ -157,6 +184,10 @@ public class Properties extends java.util.Properties {
 		return new Properties(values);
 	}
 	
+	public static Properties properties(Property... properties) {
+		return new Properties(properties);
+	}
+	
 	public static Properties properties(String url) throws Exception {
 		return new Properties(url);
 	}
@@ -179,5 +210,11 @@ public class Properties extends java.util.Properties {
 	
 	public static Properties properties(InputStream input, Properties defaultValues) {
 		return new Properties(input, defaultValues);
+	}
+	
+	public class Property extends Map.Entry<String, String> {
+		public Property(String key, String value) {
+			super(key, value);
+		}
 	}
 }
