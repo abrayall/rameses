@@ -144,6 +144,10 @@ public class List<T> implements java.util.List<T> {
 	public String toString() {
 		return this.list.toString();
 	}
+	
+	public Stream<T> stream() {
+		return this.list.stream();
+	}
 
 	@Override
 	public T get(int index) {  
