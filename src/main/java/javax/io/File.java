@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -20,6 +21,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import javax.lang.Try;
 import javax.util.List;
@@ -49,7 +52,7 @@ public class File {
 	}
 	
 	public String path() {
-		return this.file.getAbsolutePath();
+		return this.file.toPath().normalize().toAbsolutePath().toString();
 	}
 	
 	public boolean exists() {
@@ -118,6 +121,27 @@ public class File {
 		return List.list(Arrays.stream(this.file.listFiles()).map(file -> {
 			return new File(file);	
 		}).filter(file -> filter.apply(file)).collect(Collectors.toList()));
+	}
+	
+	public Stream<File> search() throws Exception {
+		return this.search(file -> true);
+	}
+	
+	public Stream<File> search(String pattern) throws Exception {
+		return this.search(file -> file.path().matches(pattern));
+	}
+	
+	public Stream<File> search(Function<File, Boolean> filter) throws Exception {
+		return this.list().parallelStream().flatMap(path -> {
+			File file = new File(path.toFile());
+			if (file.isDirectory()) 
+				return Try.attempt(() -> file.search(filter));
+			
+			return filter.apply(file) == true ? Stream.of(file) : Stream.empty();	
+		});
+		//return Files.find(this.file.toPath(), Integer.MAX_VALUE, (path, attributes) -> {
+		//	return filter.apply(new File(path.toFile()));
+		//}, FileVisitOption.FOLLOW_LINKS).map(path -> new File(path.toFile()));
 	}
 	
 	public InputStream inputStream() throws Exception {
@@ -380,9 +404,5 @@ public class File {
 	
 	public File file(java.io.File file) {
 		return new File(file);
-	}
-	
-	public static void main(String[] arguments) throws Exception {
-		new File(".").synchronize("/tmp/test");
 	}
 }
