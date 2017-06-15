@@ -134,7 +134,10 @@ public class Properties extends java.util.Properties {
 	}
 	
 	public Properties set(Property... properties) {
-		return this.set(properties(properties));
+		for (Property property : properties)
+			this.put(property.key, property.value);
+		
+		return this;
 	}
 		
 	public Properties set(Properties properties) {
