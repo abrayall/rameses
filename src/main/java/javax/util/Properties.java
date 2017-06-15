@@ -212,7 +212,11 @@ public class Properties extends java.util.Properties {
 		return new Properties(input, defaultValues);
 	}
 	
-	public class Property extends Map.Entry<String, String> {
+	public static Property property(String name, String value) {
+		return new Property(name, value);
+	}
+	
+	public static class Property extends Map.Entry<String, String> {
 		public Property(String key, String value) {
 			super(key, value);
 		}
