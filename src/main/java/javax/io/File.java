@@ -60,6 +60,10 @@ public class File {
 		return this.file.isDirectory() ? "directory" : "file";
 	}
 	
+	public boolean isDirectory() {
+		return this.file.isDirectory();
+	}
+	
 	public long size() {
 		return this.file.length();
 	}
@@ -196,9 +200,10 @@ public class File {
 
 		private File file;
 		private BiConsumer<File, String> callback;
+		
 		private WatchService service;
 		private Boolean running = false;
-		
+	
 		public FileWatcher(File file, BiConsumer<File, String> callback) {
 			this.file = file;
 			this.callback = callback;
@@ -206,7 +211,7 @@ public class File {
 		
 		public FileWatcher watch() throws Exception {
 			this.service = this.file.toPath().getFileSystem().newWatchService();
-			this.file.parent().toPath().register(service, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
+			this.register(file);
 			this.start();
 			return this;
 		}
@@ -219,8 +224,8 @@ public class File {
 					for (WatchEvent<?> event : key.pollEvents()) {
 						if (Path.class.isInstance(event.context())) {
 							Path context = (Path) event.context();
-							if (context.getFileName().toString().equals(this.file.name()) || this.file.file.isDirectory() == true)
-								Try.attempt(() -> callback.accept(this.file.file.isDirectory() == true ? new File(context.getFileName().toString()) : this.file, event.kind().toString().toLowerCase().replace("entry_", "")));
+							if (context.getFileName().toString().equals(this.file.name()) || this.file.isDirectory() == true)
+								Try.attempt(() -> callback.accept(this.file.isDirectory() == true ? new File(context.getFileName().toString()) : this.file, event.kind().toString().toLowerCase().replace("entry_", "")));
 						}
 					}
 					
@@ -232,6 +237,13 @@ public class File {
 		public void halt() throws Exception {
 			this.service.close();
 			this.running = false;
+		}
+		
+		protected void register(File file) throws Exception {
+			File context = file.isDirectory() ? file : file.parent();
+			context.toPath().register(service, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
+			if (file.isDirectory())
+				file.list(child -> child.isDirectory()).forEach(directory -> Try.attempt(() -> register(directory)));			
 		}
 	}
 	
