@@ -44,6 +44,7 @@ int value = Try.attempt(() -> {
 });
 
 System.out.println(value); // prints out 2
+```
 ```java
 import javax.lang.Try
 ...
