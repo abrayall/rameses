@@ -82,13 +82,13 @@ System.out.println(value); // prints out 24
 #### javax.lang.Runtime
 The Runtime class provides methods for executing command line executables and other commands.
 ##### Running command line executable
-````java
+```java
 import javax.io.Streams;
 import static javax.lang.Runtime.*;
 ...
 
 System.out.println(Streams.read(execute("echo 4").getInputStream())) // prints out 4
-````
+```
 
 <br><br>
 ### Collection Utilities
