@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -22,7 +21,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import javax.lang.Try;
 import javax.util.List;
@@ -82,8 +80,14 @@ public class File {
 	}
 	
 	public File delete() throws Exception {
-		if (this.file.delete() == false)
-			throw new Exception("Failed to delete file");
+		if (this.file.exists() == true) {
+			if (this.file.isDirectory()) {
+				for (File child : this.list())
+					child.delete();
+			}
+			
+			Files.delete(this.file.toPath());
+		}
 		
 		return this;
 	}
@@ -404,5 +408,9 @@ public class File {
 	
 	public File file(java.io.File file) {
 		return new File(file);
+	}
+	
+	public static void main(String[] arguments) throws Exception {
+		new File("/tmp/myapp/build").delete();
 	}
 }
