@@ -83,6 +83,11 @@ public class List<T> implements java.util.List<T> {
 		return this;
 	}
 	
+	public List<T> append(List<T> objects){
+		this.list.addAll(objects);
+		return this;
+	}
+	
 	public List<T> append(Supplier<T> function) {
 		return this.append(function.get());
 	}
