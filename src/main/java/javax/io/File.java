@@ -121,7 +121,7 @@ public class File {
 	}
 	
 	public List<File> list(Function<File, Boolean> filter) throws Exception {
-		if (this.file.exists() == false) return List.list();
+		if (this.file.exists() == false || this.file.isDirectory() == false) return List.list();
 		return List.list(Arrays.stream(this.file.listFiles()).map(file -> {
 			return new File(file);	
 		}).filter(file -> filter.apply(file)).collect(Collectors.toList()));
@@ -146,6 +146,10 @@ public class File {
 		//return Files.find(this.file.toPath(), Integer.MAX_VALUE, (path, attributes) -> {
 		//	return filter.apply(new File(path.toFile()));
 		//}, FileVisitOption.FOLLOW_LINKS).map(path -> new File(path.toFile()));
+	}
+	
+	public long latest() throws Exception {
+		return this.search().mapToLong(file -> file.modified()).max().orElse(this.modified());
 	}
 	
 	public InputStream inputStream() throws Exception {
@@ -408,9 +412,5 @@ public class File {
 	
 	public File file(java.io.File file) {
 		return new File(file);
-	}
-	
-	public static void main(String[] arguments) throws Exception {
-		new File("/tmp/myapp/build").delete();
 	}
 }
