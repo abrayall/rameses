@@ -53,7 +53,7 @@ public class Timestamp extends java.sql.Timestamp {
 	public static String format(long timestamp, TimeZone timezone) {
 		return format(timestamp, FORMAT, timezone);
 	}
-	
+
 	public static String format(long timestamp, String format, TimeZone timezone) {
 		return formatters.get(timezone.getID(), () -> formatter(format, timezone)).format(timestamp);		
 	}
@@ -71,7 +71,7 @@ public class Timestamp extends java.sql.Timestamp {
 	}
 	
 	public static SimpleDateFormat formatter(String format, TimeZone timezone) {
-		SimpleDateFormat formatter = new SimpleDateFormat();
+		SimpleDateFormat formatter = new SimpleDateFormat(format);
 		formatter.setTimeZone(timezone);
 		return formatter;
 	}
