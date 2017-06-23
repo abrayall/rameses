@@ -5,17 +5,41 @@ import static javax.util.Map.*;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
-public class Timestamp {
+@SuppressWarnings("serial")
+public class Timestamp extends java.sql.Timestamp {
 
 	public static TimeZone GMT = TimeZone.getTimeZone("GMT");
 	public static TimeZone TIMEZONE = TimeZone.getDefault();
 
 	private static String FORMAT = "YYYY-MM-dd HH:mm:ss";
-	
 	private static Map<String, SimpleDateFormat> formatters = map();
 	
-	public static String now() {
-		return format(System.currentTimeMillis());
+	public Timestamp(long time) {
+		super(time);
+	}
+	
+	public String format() {
+		return Timestamp.format(this.getTime());
+	}
+	
+	public String format(String format) {
+		return Timestamp.format(this.getTime(), format);
+	}
+	
+	public String format(TimeZone timezone) {
+		return Timestamp.format(this.getTime(), timezone);
+	}
+	
+	public String format(String format, TimeZone timezone) {
+		return Timestamp.format(this.getTime(), format, timezone);
+	}
+	
+	public String toString() {
+		return format();
+	}
+	
+	public static Timestamp now() {
+		return new Timestamp(System.currentTimeMillis());
 	}
 	
 	public static String format(long timestamp) {
@@ -24,6 +48,10 @@ public class Timestamp {
 	
 	public static String format(long timestamp, String format) {
 		return format(timestamp, format, TIMEZONE);
+	}
+	
+	public static String format(long timestamp, TimeZone timezone) {
+		return format(timestamp, FORMAT, timezone);
 	}
 	
 	public static String format(long timestamp, String format, TimeZone timezone) {
