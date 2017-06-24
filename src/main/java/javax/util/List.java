@@ -144,12 +144,7 @@ public class List<T> implements java.util.List<T> {
 		this.clear();
 		return this;
 	}
-	
-	@Override
-	public String toString() {
-		return this.list.toString();
-	}
-	
+		
 	public Stream<T> stream() {
 		return this.list.stream();
 	}
@@ -276,6 +271,31 @@ public class List<T> implements java.util.List<T> {
 		
 		return this;
 	}
+
+	public String join() {
+		return this.join(",");
+	}
+	
+	public String join(String seperator) {
+		return this.join("", "", seperator);
+	}
+
+	public String join(String prefix, String suffix, String seperator) {
+		StringBuffer buffer = new StringBuffer(prefix);
+		for (int i = 0; i < this.list.size(); i++) {
+			buffer.append(this.list.get(i));
+			if (i != this.list.size() - 1)
+				buffer.append(seperator);
+		}
+			
+		return buffer.append(suffix).toString();
+	}
+	
+	@Override
+	public String toString() {
+		return this.list.toString();
+	}
+
 	
 	@SafeVarargs
 	public static <T> List<T> list(T... items) {
