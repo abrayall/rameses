@@ -4,6 +4,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 public class Map<K, V> implements java.util.Map<K, V> {
@@ -131,6 +134,33 @@ public class Map<K, V> implements java.util.Map<K, V> {
 	
 	public Map<K, V> synchronize() {
 		this.map = Collections.synchronizedMap(this.map);
+		return this;
+	}
+	
+	public Map<K, V> each(BiConsumer<K, V> action) {
+		return this.each(action);
+	}
+	
+	public Map<K, V> foreach(BiConsumer<K, V> action) {
+		for (K key : this.keySet())
+			action.accept(key,  this.get(key));
+		
+		return this;
+	}
+	
+	public Map<K, V> map(BiFunction<K, V, V> mapper) {
+		for (K key : this.keySet())
+			this.put(key, mapper.apply(key, this.get(key)));
+		
+		return this;
+	}
+	
+	public Map<K, V> filter(BiPredicate<K, V> filter) {
+		for (K key : this.keySet()) {
+			if (filter.test(key, this.get(key)) == false)
+				this.remove(key);
+		}
+		
 		return this;
 	}
 	
