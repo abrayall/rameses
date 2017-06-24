@@ -1,13 +1,7 @@
 package javax.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -289,6 +283,23 @@ public class List<T> implements java.util.List<T> {
 		}
 			
 		return buffer.append(suffix).toString();
+	}
+	
+	public List<T> each(Consumer<T> action) {
+		return this.foreach(action);
+	}
+	
+	public List<T> foreach(Consumer<T> action) {
+		this.list.stream().forEach(action);
+		return this;
+	}
+	
+	public List<T> filter(Predicate<T> filter) {
+		return this.list.stream().filter(filter).collect(Collectors.toCollection(List::new));
+	}
+	
+	public <M> List<M> map(Function<T, M> mapper) {
+		return this.list.stream().map(mapper).collect(Collectors.toCollection(List::new));
 	}
 	
 	@Override
