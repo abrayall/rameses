@@ -190,6 +190,20 @@ public class Map<K, V> implements java.util.Map<K, V> {
 		return map(clazz.newInstance(), entries);
 	}
 	
+	@SafeVarargs
+	public static <V> Map<String, V> map(V... items) {
+		return map(List.list(items));
+	}
+	
+	public static <V> Map<String, V> map(List<V> list) {
+		Map<String, V> map = map();
+		list.foreach((item, index) -> {
+			map.put(index.toString(), list.get(index));
+		});
+		
+		return map;
+	}
+	
 	public static <K, V> Entry<K, V> entry(K key, V value) {
 		return new Entry<K, V>(key, value);
 	}
