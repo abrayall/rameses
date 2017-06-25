@@ -53,6 +53,13 @@ public class ListTest {
 
 		List<String> synced2 = synchronize(list());
 		isEqual(synced2.list.getClass().getName(), "java.util.Collections$SynchronizedList");
+		
+		List<String> reversed = list2.reverse();
+		check(reversed.size() == 7);
+		check(reversed.get(0) == "9");
+		
+		check(reversed.fold(0, (index, item) -> index) == 0);
+		check(reversed.fold(0, (index, item) -> index + 1) == 7);
 	}
 	
 	public void checkJavaUtilList(List<String> list) throws Exception {

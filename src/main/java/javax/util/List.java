@@ -311,10 +311,14 @@ public class List<T> implements java.util.List<T> {
 	}
 	
 	public List<T> each(BiConsumer<T, Integer> action) {
-		return this;
+		return this.foreach(action);
 	}
 	
 	public List<T> foreach(BiConsumer<T, Integer> action) {
+		this.foldLeft(0, (index, item) -> {
+			action.accept(item, index);
+			return index + 1;
+		});
 		return this;
 	}
 		
