@@ -1,6 +1,7 @@
 package javax.lang;
 
 import javax.lang.Assert;
+import javax.util.Map;
 
 public class StringsTest {
 
@@ -122,6 +123,16 @@ public class StringsTest {
 		Assert.equals("<div>", Strings.surround("div", "<", ">"));
 	}
 	
+	public void testFormat() throws Exception {
+		Assert.equals("this is a test of the national broadcast system 0.0", Strings.format("this ${0} a test ${1} ${2} ${3}", "is", "of the national", "broadcast system", 0.0));
+		Assert.equals("this is a test of the national broadcast system 0.0", Strings.format("this ${verb} a test ${subject1} ${subject2} ${number}", Map.map(
+			Map.entry("verb", "is"),
+			Map.entry("subject1", "of the national"),
+			Map.entry("subject2", "broadcast system"),
+			Map.entry("number", 0.0)
+		)));
+	}
+	
 	public static void main(String[] arguments) throws Exception {
 		StringsTest test = new StringsTest();
 		test.testString();
@@ -137,5 +148,6 @@ public class StringsTest {
 		test.testBetween();
 		test.testPositions();
 		test.testAppend();
+		test.testFormat();
 	}
 }
