@@ -81,6 +81,32 @@ public class StringsTest {
 		Assert.equals("bar", tokens[1]);
 	}
 	
+	public void testBetween() throws Exception {
+		Assert.equals("foo", Strings.between("barfoobar", 3, 6));
+		Assert.equals("foobar", Strings.between("barfoobar", 3, 16));
+		Assert.equals("", Strings.between("barfoobar", 13, 16));
+		Assert.equals("foo", Strings.between("barfoobar", "bar", "bar"));
+	}
+	
+	public void testPositions() throws Exception {
+		Assert.equals("b", Strings.head("barfoobar"));
+		Assert.equals("b", Strings.head("b"));
+		Assert.equals("", Strings.head(""));
+		
+		Assert.equals("arfoobar", Strings.tail("barfoobar"));
+		Assert.equals("r", Strings.tail("ar"));
+		Assert.equals("", Strings.tail("r"));
+		Assert.equals("", Strings.tail(""));
+		
+		Assert.equals("b", Strings.first("barfoobar"));
+		Assert.equals("b", Strings.first("b"));
+		Assert.equals("", Strings.first(""));
+	
+		Assert.equals("r", Strings.last("barfoobar"));
+		Assert.equals("b", Strings.last("b"));
+		Assert.equals("", Strings.last(""));
+	}
+	
 	public static void main(String[] arguments) throws Exception {
 		StringsTest test = new StringsTest();
 		test.testString();
@@ -93,5 +119,7 @@ public class StringsTest {
 		test.testTruncate();
 		test.testGenerate();
 		test.testExtract();
+		test.testBetween();
+		test.testPositions();
 	}
 }

@@ -11,12 +11,24 @@ public class Strings {
 		return object.toString();
 	}
 	
+	public static String string(String string) {
+		return new String(string);
+	}
+	
+	public static String string(char... characters) {
+		return new String(characters);
+	}
+	
 	public static String[] strings(Object... objects) {
 		String[] strings = new String[objects.length];
 		for (int i = 0; i < objects.length; i++)
 			strings[i] = string(objects[i]);
 		
 		return strings;
+	}
+	
+	public static String character(String string, int index) {
+		return string(string.charAt(index));
 	}
 	
 	public static String join(String... strings) {
@@ -111,6 +123,19 @@ public class Strings {
 		return strings;
 	}
 	
+	public static String between(String string, int start, int end) {
+		if (string.length() > start && string.length() > end)
+			return string.substring(start, end);
+		else if (string.length() > start)
+			return string.substring(start);
+		
+		return "";
+	}
+	
+	public static String between(String string, String start, String end) {
+		return List.list(extract(string, start, end)).get(0, "");
+	}
+	
 	public static String[] extract(String string, String pattern) {
 		List<String> tokens = List.list();
 		Matcher matcher = Pattern.compile(pattern).matcher(string);
@@ -121,6 +146,37 @@ public class Strings {
 	}
 	
 	public static String[] extract(String string, String start, String end) {
-		return extract(string, "\\" + start + "(.*?)" + "\\" + end);
+		return extract(string, Pattern.quote(start) + "(.*?)" + Pattern.quote(end));
+	}
+	
+	public static String collapse(String string) {
+		return collapse(string, "\\s.*", " ");
+	}
+	
+	public static String collapse(String string, String pattern) {
+		return collapse(string, pattern, character(string, 0));
+	}
+	
+	public static String collapse(String string, String pattern, String replacement) {
+		return string.replaceAll(pattern, replacement);
+	}
+	
+	public static String head(String string) {
+		return between(string, 0, 1);
+	}
+	
+	public static String tail(String string) {
+		return between(string, 1, string.length());
+	}
+	
+	public static String first(String string) {
+		return head(string);
+	}
+	
+	public static String last(String string) {
+		if (string.length() == 0)
+			return "";
+		
+		return between(string, string.length() - 1, string.length());
 	}
 }
