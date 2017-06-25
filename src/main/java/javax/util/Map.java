@@ -196,9 +196,13 @@ public class Map<K, V> implements java.util.Map<K, V> {
 	}
 	
 	public static <V> Map<String, V> map(List<V> list) {
-		Map<String, V> map = map();
+		return map(list, (index, item) -> index.toString());
+	}
+	
+	public static <K, V> Map<K, V> map(List<V> list, BiFunction<Integer, V, K> converter) {
+		Map<K, V> map = map();
 		list.foreach((item, index) -> {
-			map.put(index.toString(), list.get(index));
+			map.put(converter.apply(index, item), item);
 		});
 		
 		return map;
