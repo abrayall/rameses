@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.util.List;
+import javax.util.Map;
 
 public class Strings {
 	
@@ -198,5 +199,34 @@ public class Strings {
 	
 	public static String surround(String string, String prefix, String suffix) {
 		return prepend(append(string, suffix), prefix);
+	}
+	
+	public static String format(String string, Object... parameters) {
+		return new Formatter().format(string, parameters);
+	}
+	
+	public static String format(String string, Map<String, Object> parameters) {
+		return new Formatter().format(string, parameters);
+	}
+	
+	public static class Formatter {
+		
+		protected static String START = "${";
+		protected static String END = "}";
+		
+		public String format(String string, Object... parameters) {
+			return format(string, Map.map(parameters));
+		}
+		
+		public String format(String string, Map<String, Object> parameters) {
+			for (String expression : extract(string, START, END))
+				string = handle(string, expression, parameters);
+			
+			return string;
+		}
+		
+		protected String handle(String string, String expression, Map<String, Object> parameters) {
+			return string.replaceAll(Pattern.quote(START + expression + END), parameters.get(expression, "").toString());
+		}
 	}
 }
