@@ -4,7 +4,7 @@ import static javax.lang.Strings.*;
 
 public class System {
 	public static void print(Object... objects) {
-		println(strings(objects));
+		print(strings(objects));
 	}
 	
 	public static void println(Object... objects) {
@@ -17,6 +17,14 @@ public class System {
 	
 	public static void println(String... strings) {
 		println(join(strings));
+	}
+	
+	public static void printf(String string, Object... objects) {
+		print(format(string, objects));
+	}
+	
+	public static void printlnf(String string, Object... objects) {
+		println(format(string, objects));
 	}
 		
 	public static void print(String string) {
