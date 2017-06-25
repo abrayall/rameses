@@ -218,6 +218,10 @@ public class Strings {
 			return format(string, Map.map(parameters));
 		}
 		
+		public String format(String string, java.util.Map<String, Object> parameters) {
+			return format(string, Map.map(parameters));
+		}
+		
 		public String format(String string, Map<String, Object> parameters) {
 			for (String expression : extract(string, START, END))
 				string = handle(string, expression, parameters);
