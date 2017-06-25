@@ -224,6 +224,22 @@ public class List<T> implements java.util.List<T> {
 	public T first() {
 		return this.list.get(0);
 	}
+	
+	public List<T> reverse() {
+		List<T> list = list(new ArrayList<T>(this.list.size()));
+		for (int i = 0; i < this.list.size(); i++) 
+			list.add(i, this.list.get(this.list.size() - (i + 1)));
+					
+		return list;
+	}
+	
+	public List<T> clone() {
+		List<T> list = list();
+		for (int i = 0; i < this.list.size(); i++)
+			list.put(i, this.list.get(i));
+		
+		return list;
+	}
 
 	@Override
 	public ListIterator<T> listIterator() {
@@ -294,12 +310,35 @@ public class List<T> implements java.util.List<T> {
 		return this;
 	}
 	
+	public List<T> each(BiConsumer<T, Integer> action) {
+		return this;
+	}
+	
+	public List<T> foreach(BiConsumer<T, Integer> action) {
+		return this;
+	}
+		
 	public List<T> filter(Predicate<T> filter) {
 		return this.list.stream().filter(filter).collect(Collectors.toCollection(List::new));
 	}
 	
 	public <M> List<M> map(Function<T, M> mapper) {
 		return this.list.stream().map(mapper).collect(Collectors.toCollection(List::new));
+	}
+	
+	public <R> R fold(R object, BiFunction<R, T, R> folder) {
+		for (T item : this.list)
+			object = folder.apply(object, item);
+		
+		return object;
+	}
+	
+	public <R> R foldLeft(R object, BiFunction<R, T, R> folder) {
+		return this.fold(object, folder);
+	}
+	
+	public <R> R foldRight(R object, BiFunction<R, T, R> folder) {
+		return this.reverse().fold(object, folder);
 	}
 	
 	@Override
