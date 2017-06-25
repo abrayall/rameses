@@ -179,4 +179,24 @@ public class Strings {
 		
 		return between(string, string.length() - 1, string.length());
 	}
+	
+	public static String append(String string, String... suffixes) {
+		StringBuffer buffer = new StringBuffer(string);
+		for (String suffix : suffixes)
+			buffer.append(suffix);
+		
+		return buffer.toString();
+	}
+	
+	public static String prepend(String string, String... prefixes) {
+		StringBuffer buffer = new StringBuffer();
+		for (String prefix : prefixes)
+			buffer.append(prefix);
+		
+		return buffer.append(string).toString();
+	}
+	
+	public static String surround(String string, String prefix, String suffix) {
+		return prepend(append(string, suffix), prefix);
+	}
 }

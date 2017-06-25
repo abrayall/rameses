@@ -107,6 +107,21 @@ public class StringsTest {
 		Assert.equals("", Strings.last(""));
 	}
 	
+	public void testAppend() throws Exception {
+		Assert.equals("foobarabc", Strings.append("foobar", "a", "b", "c"));
+		Assert.equals("foobarabcde", Strings.append("foobar", "a", "b", "cde"));
+		Assert.equals("abc", Strings.append("", "a", "b", "c"));
+		Assert.equals("aaaaabcde", Strings.append("aaa", "a", "ab", "cde"));
+
+		Assert.equals("abcfoobar", Strings.prepend("foobar", "a", "b", "c"));
+		Assert.equals("abcdefoobar", Strings.prepend("foobar", "a", "b", "cde"));
+		Assert.equals("abc", Strings.prepend("", "a", "b", "c"));
+		Assert.equals("aabcdeaaa", Strings.prepend("aaa", "a", "ab", "cde"));
+
+		Assert.equals("aaafoobarbbb", Strings.surround("foobar", "aaa", "bbb"));
+		Assert.equals("<div>", Strings.surround("div", "<", ">"));
+	}
+	
 	public static void main(String[] arguments) throws Exception {
 		StringsTest test = new StringsTest();
 		test.testString();
@@ -121,5 +136,6 @@ public class StringsTest {
 		test.testExtract();
 		test.testBetween();
 		test.testPositions();
+		test.testAppend();
 	}
 }
