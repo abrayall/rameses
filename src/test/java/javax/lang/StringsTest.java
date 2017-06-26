@@ -131,6 +131,11 @@ public class StringsTest {
 			Map.entry("subject2", "broadcast system"),
 			Map.entry("number", 0.0)
 		)));
+		
+		Assert.equals("this is te foo", Strings.format("this is ${truncate(0, 2)} ${foo()}", Map.map(Map.entry("foo", parameters -> "foo")), "test"));
+		Assert.equals("this is te foo", Strings.format("this is ${truncate(bar, 2)} ${foo()}", Map.map(Map.entry("foo", parameters -> "foo")), Map.map(
+			Map.entry("bar", "test")
+		)));
 	}
 	
 	public static void main(String[] arguments) throws Exception {

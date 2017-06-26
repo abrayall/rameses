@@ -1,10 +1,13 @@
 package javax.lang;
 
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.util.List;
 import javax.util.Map;
+import static javax.util.Map.*;
+
 
 public class Strings {
 	
@@ -202,35 +205,77 @@ public class Strings {
 	}
 	
 	public static String format(String string, Object... parameters) {
-		return new Formatter().format(string, parameters);
+		return format(string, map(), parameters);
+	}
+
+	public static String format(String string, Map<String, Function<List<String>, String>> functions, Object... parameters) {
+		return new Formatter(functions).format(string, parameters);
+	}
+
+	public static String format(String string, Map<String, Object> parameters) {
+		return format(string, map(), parameters);
 	}
 	
-	public static String format(String string, Map<String, Object> parameters) {
-		return new Formatter().format(string, parameters);
+	public static String format(String string, Map<String, Function<List<String>, String>> functions, Map<String, Object> parameters){
+		return new Formatter(functions).format(string, parameters);
 	}
 	
 	public static class Formatter {
 		
-		protected static String START = "${";
-		protected static String END = "}";
+		protected static String EXPRESSION_START = "${";
+		protected static String EXPRESSION_END = "}";
+		protected static Pattern FUNCTION = Pattern.compile("(.*)\\((.*)\\)");
+		
+		protected Map<String, Function<List<String>, String>> functions = map(
+			entry("trim", parameters -> parameters.get(0, "").trim()),
+			entry("truncate", parameters -> parameters.get(0, "").substring(0, Integer.parseInt(parameters.get(1, "1"))))
+		);
+		
+		public Formatter() {
+			this(map());
+		}
+		
+		public Formatter(Map<String, Function<List<String>, String>> functions) {
+			this.functions.putAll(functions);
+		}
 		
 		public String format(String string, Object... parameters) {
-			return format(string, Map.map(parameters));
+			return format(string, map(parameters));
 		}
 		
 		public String format(String string, java.util.Map<String, Object> parameters) {
-			return format(string, Map.map(parameters));
+			return format(string, map(parameters));
 		}
 		
 		public String format(String string, Map<String, Object> parameters) {
-			for (String expression : extract(string, START, END))
+			for (String expression : extract(string, EXPRESSION_START, EXPRESSION_END))
 				string = handle(string, expression, parameters);
 			
 			return string;
 		}
 		
 		protected String handle(String string, String expression, Map<String, Object> parameters) {
-			return string.replaceAll(Pattern.quote(START + expression + END), parameters.get(expression, "").toString());
+			String value = "";
+			if (parameters.containsKey(expression))
+				value = parameters.get(expression, "").toString();
+			else if (expression.contains("(") && expression.contains(")"))
+				value = execute(expression, parameters);
+
+			return string.replaceAll(Pattern.quote(EXPRESSION_START + expression + EXPRESSION_END), value);
+		}
+		
+		protected String execute(String expression, Map<String, Object> parameters) {
+			Matcher matcher = FUNCTION.matcher(expression);
+			if (matcher.matches() && this.functions.containsKey(matcher.group(1))) 
+				return functions.get(matcher.group(1)).apply(parameters(matcher.group(2), parameters));
+			
+			return "";
+		}
+		
+		protected List<String> parameters(String arguments, Map<String, Object> variables) {
+			return List.list(arguments.split(",")).map(string -> string.trim()).replace(0, value -> {
+				return variables.get(value, value).toString();
+			});
 		}
 	}
 }
