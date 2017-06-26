@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 import javax.util.Map;
+import javax.util.Properties;
 
 
 public class System {
@@ -98,12 +99,28 @@ public class System {
 		return new Runtime();
 	}
 	
+	public static ClassLoader getClassloader() {
+		return ClassLoader.getSystemClassLoader();
+	}
+	
+	public static ClassLoader classloader() {
+		return getClassloader();
+	}
+	
 	public static Map<String, String> getEnvironment() {
 		return Map.map(java.lang.System.getenv());
 	}
 	
 	public static Map<String, String> environment() {
 		return getEnvironment();
+	}
+	
+	public static Properties getProperties() {
+		return Properties.properties(java.lang.System.getProperties());
+	}
+	
+	public static Properties properties() {
+		return getProperties();
 	}
 	
 	public static String operatingSystem() {
