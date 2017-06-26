@@ -95,6 +95,14 @@ public class System {
 		return java.lang.System.currentTimeMillis();
 	}
 	
+	public static void exit() {
+		java.lang.System.exit(1);
+	}
+	
+	public static void exit(int code) {
+		java.lang.System.exit(code);
+	}
+	
 	public static Runtime getRuntime() {
 		return runtime();
 	}
