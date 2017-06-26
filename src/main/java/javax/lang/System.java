@@ -5,6 +5,8 @@ import static javax.lang.Strings.*;
 import java.io.InputStream;
 import java.io.PrintStream;
 
+import javax.util.Map;
+
 
 public class System {
 	
@@ -94,6 +96,14 @@ public class System {
 	
 	public static Runtime runtime() {
 		return new Runtime();
+	}
+	
+	public static Map<String, String> getEnvironment() {
+		return Map.map(java.lang.System.getenv());
+	}
+	
+	public static Map<String, String> environment() {
+		return getEnvironment();
 	}
 	
 	public static String operatingSystem() {
