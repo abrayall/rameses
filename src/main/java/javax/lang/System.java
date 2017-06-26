@@ -2,37 +2,84 @@ package javax.lang;
 
 import static javax.lang.Strings.*;
 
+import java.io.InputStream;
+import java.io.PrintStream;
+
 public class System {
+	
+	public static PrintStream out() {
+		return java.lang.System.out;
+	}
+	
+	public static PrintStream err() {
+		return java.lang.System.err;
+	}
+	
+	public static InputStream in() {
+		return java.lang.System.in;
+	}
+	
 	public static void print(Object... objects) {
-		print(strings(objects));
+		print(out(), strings(objects));
 	}
 	
 	public static void println(Object... objects) {
-		println(strings(objects));
+		println(out(), strings(objects));
 	}
 	
+	public static void print(PrintStream stream, Object... objects) {
+		print(stream, strings(objects));
+	}
+	
+	public static void println(PrintStream stream, Object... objects) {
+		println(stream, strings(objects));
+	}
 	public static void print(String... strings) {
-		print(join(strings));
+		print(out(), join(strings));
 	}
 	
 	public static void println(String... strings) {
-		println(join(strings));
+		println(out(), join(strings));
+	}
+
+	public static void print(PrintStream stream, String... strings) {
+		print(stream, join(strings));
 	}
 	
+	public static void println(PrintStream stream, String... strings) {
+		println(stream, join(strings));
+	}
+
 	public static void printf(String string, Object... objects) {
-		print(format(string, objects));
+		print(out(), format(string, objects));
 	}
 	
 	public static void printlnf(String string, Object... objects) {
-		println(format(string, objects));
+		println(out(), format(string, objects));
+	}
+	
+	public static void printf(PrintStream stream, String string, Object... objects) {
+		print(stream, format(string, objects));
+	}
+	
+	public static void printlnf(PrintStream stream, String string, Object... objects) {
+		println(stream, format(string, objects));
 	}
 		
 	public static void print(String string) {
-		java.lang.System.out.print(string);
+		print(out(), string);
 	}
 	
 	public static void println(String string) {
-		java.lang.System.out.println(string);
+		println(out(), string);
+	}
+	
+	public static void print(PrintStream stream, String string) {
+		stream.print(string);
+	}
+	
+	public static void println(PrintStream stream, String string) {
+		stream.println(string);
 	}
 	
 	public static long now() {
