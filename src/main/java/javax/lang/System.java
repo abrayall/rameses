@@ -5,6 +5,7 @@ import static javax.lang.Strings.*;
 import java.io.InputStream;
 import java.io.PrintStream;
 
+
 public class System {
 	
 	public static PrintStream out() {
@@ -34,6 +35,7 @@ public class System {
 	public static void println(PrintStream stream, Object... objects) {
 		println(stream, strings(objects));
 	}
+	
 	public static void print(String... strings) {
 		print(out(), join(strings));
 	}
@@ -84,6 +86,14 @@ public class System {
 	
 	public static long now() {
 		return java.lang.System.currentTimeMillis();
+	}
+	
+	public static Runtime getRuntime() {
+		return runtime();
+	}
+	
+	public static Runtime runtime() {
+		return new Runtime();
 	}
 	
 	public static String operatingSystem() {
