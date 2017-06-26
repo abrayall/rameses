@@ -18,6 +18,10 @@ public class Properties extends java.util.Properties {
 		this.put(key, value);
 	}
 	
+	public Properties(java.util.Properties properties) {
+		this.set(properties);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public Properties(Map.Entry<Object, Object>... values) {
 		this.set(values);
@@ -140,7 +144,7 @@ public class Properties extends java.util.Properties {
 		return this;
 	}
 		
-	public Properties set(Properties properties) {
+	public Properties set(java.util.Properties properties) {
 		for (Object key : properties.keySet())
 			this.put(key, properties.get(key));
 		
@@ -176,6 +180,10 @@ public class Properties extends java.util.Properties {
 	
 	public static Properties properties() {
 		return new Properties();
+	}
+	
+	public static Properties properties(java.util.Properties properties) {
+		return new Properties(properties);
 	}
 	
 	public static Properties properties(Map<Object, Object> values) {
