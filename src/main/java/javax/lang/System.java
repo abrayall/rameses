@@ -11,16 +11,20 @@ import javax.util.Properties;
 
 public class System {
 	
+	public static PrintStream out = java.lang.System.out;
+	public static PrintStream err = java.lang.System.err;
+	public static InputStream in = java.lang.System.in;
+	
 	public static PrintStream out() {
-		return java.lang.System.out;
+		return out;
 	}
 	
 	public static PrintStream err() {
-		return java.lang.System.err;
+		return err;
 	}
 	
 	public static InputStream in() {
-		return java.lang.System.in;
+		return in;
 	}
 	
 	public static void print(Object... objects) {
@@ -105,6 +109,10 @@ public class System {
 	
 	public static ClassLoader classloader() {
 		return getClassloader();
+	}
+	
+	public static java.lang.Class<?> loadClass(String name) throws ClassNotFoundException {
+		return classloader().loadClass(name);
 	}
 	
 	public static Map<String, String> getEnvironment() {
