@@ -46,6 +46,11 @@ public class List<T> implements java.util.List<T> {
 	public <A> A[] toArray(A[] array) {
 		return this.list.toArray(array);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public T[] array() {
+		return this.toArray((T[]) java.lang.reflect.Array.newInstance(this.get(0).getClass(), this.size())); 
+	}
 
 	@Override
 	public boolean add(T object) {
