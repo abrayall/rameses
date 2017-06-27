@@ -164,6 +164,14 @@ public class Map<K, V> implements java.util.Map<K, V> {
 		return this;
 	}
 	
+	public Map<V, K> reverse() {
+		Map<V, K> reversed = map();
+		for (K key : this.keySet())
+			reversed.put(this.get(key), key);
+			
+		return reversed;
+	}
+	
 	@Override
 	public String toString() {
 		return this.map.toString();
