@@ -328,11 +328,11 @@ public class List<T> implements java.util.List<T> {
 	}
 		
 	public List<T> filter(Predicate<T> filter) {
-		return this.list.stream().filter(filter).collect(Collectors.toCollection(List::new));
+		return this.list.stream().filter(filter).collect(Collectors.toCollection(List<T>::new));
 	}
 	
 	public <M> List<M> map(Function<T, M> mapper) {
-		return this.list.stream().map(mapper).collect(Collectors.toCollection(List::new));
+		return this.list.stream().map(mapper).collect(Collectors.toCollection(List<M>::new));
 	}
 	
 	public <R> R fold(R object, BiFunction<R, T, R> folder) {

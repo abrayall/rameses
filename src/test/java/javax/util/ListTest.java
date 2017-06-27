@@ -60,6 +60,9 @@ public class ListTest {
 		
 		check(reversed.fold(0, (index, item) -> index) == 0);
 		check(reversed.fold(0, (index, item) -> index + 1) == 7);
+		
+		List<Integer> list3 = list2.map(string -> Integer.parseInt(string));
+		check(list3.get(0) == 3);
 	}
 	
 	public void checkJavaUtilList(List<String> list) throws Exception {
