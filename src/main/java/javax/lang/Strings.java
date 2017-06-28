@@ -204,6 +204,16 @@ public class Strings {
 		return prepend(append(string, suffix), prefix);
 	}
 	
+	public boolean isNumeric(String string) {
+		try {  
+		    Double.parseDouble(string);  
+		} catch(NumberFormatException e) {  
+			return false;  
+		}  
+		
+		return true;  
+	}
+	
 	public static String format(String string, Object... parameters) {
 		return format(string, map(), parameters);
 	}
