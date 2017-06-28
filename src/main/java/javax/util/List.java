@@ -230,6 +230,14 @@ public class List<T> implements java.util.List<T> {
 		return this.list.get(0);
 	}
 	
+	public List<T> head() {
+		return list(this.list.get(0));
+	}
+	
+	public List<T> tail() {
+		return list(this.list.subList(1, this.list.size()));
+	}
+	
 	public List<T> reverse() {
 		List<T> list = list(new ArrayList<T>(this.list.size()));
 		for (int i = 0; i < this.list.size(); i++) 
