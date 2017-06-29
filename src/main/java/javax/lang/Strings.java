@@ -204,7 +204,7 @@ public class Strings {
 		return prepend(append(string, suffix), prefix);
 	}
 	
-	public boolean isNumeric(String string) {
+	public static boolean isNumeric(String string) {
 		try {  
 		    Double.parseDouble(string);  
 		} catch(NumberFormatException e) {  
