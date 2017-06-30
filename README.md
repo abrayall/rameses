@@ -19,7 +19,8 @@ The System class provides convenience methods for printing out values to the con
 import static javax.lang.System.*;
 ...
 
-println("Hello World")  // prints out Hello World
+println("Hello World");  // prints out Hello World
+println("Hello", "World", 10, true, 1 + 1);   // prints out Hello World 10 true 2
 ```
 
 ##### Getting system time
@@ -27,7 +28,7 @@ println("Hello World")  // prints out Hello World
 import static javax.lang.System.*;
 ...
 
-println(now())  // prints out current time (1492121352021)
+println(now());  // prints out current time (1492121352021)
 ```
 
 <br>
