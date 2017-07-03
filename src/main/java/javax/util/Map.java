@@ -17,7 +17,7 @@ public class Map<K, V> implements java.util.Map<K, V> {
 		this(new HashMap<K, V>());
 	}
 	
-	protected Map(java.util.Map<K, V> map) {
+	public Map(java.util.Map<K, V> map) {
 		this.map = map;
 	}
 	
@@ -87,6 +87,12 @@ public class Map<K, V> implements java.util.Map<K, V> {
 		return this;
 	}
 	
+	public Map<K, V> set(java.util.Map<? extends K, ? extends V> map) {
+		this.map.clear();
+		this.map.putAll(map);
+		return this;
+	}
+	
 	@Override
 	public V remove(Object key) {
 		return this.map.remove(key);
@@ -100,6 +106,11 @@ public class Map<K, V> implements java.util.Map<K, V> {
 	@Override
 	public void putAll(java.util.Map<? extends K, ? extends V> map) {
 		this.map.putAll(map);
+	}
+	
+	public Map<K, V> put(java.util.Map<? extends K, ? extends V> map) {
+		this.map.putAll(map);
+		return this;
 	}
 	
 	public Map<K, V> concat(java.util.Map<? extends K, ? extends V> map) {
