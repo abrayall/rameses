@@ -1,6 +1,5 @@
 package javax.util;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
@@ -8,6 +7,7 @@ import java.util.concurrent.Callable;
 
 import javax.lang.Try;
 import javax.net.Urls;
+import javax.io.File;
 
 @SuppressWarnings("serial")
 public class Properties extends java.util.Properties {
@@ -40,10 +40,18 @@ public class Properties extends java.util.Properties {
 	}
 	
 	public Properties(File file, Properties defaultValues) {
-		this(() -> new FileInputStream(file), defaultValues);
+		this(file.toFile(), defaultValues);
 	}
 	
 	public Properties(File file, Map<Object, Object> defaultValues) {
+		this(file.toFile(), defaultValues);
+	}
+	
+	public Properties(java.io.File file, Properties defaultValues) {
+		this(() -> new FileInputStream(file), defaultValues);
+	}
+	
+	public Properties(java.io.File file, Map<Object, Object> defaultValues) {
 		this(() -> new FileInputStream(file), defaultValues);
 	}
 	
@@ -170,11 +178,15 @@ public class Properties extends java.util.Properties {
 	}
 	
 	public Properties load(File file, Properties defaultValues) {
-		return this.load(() -> new FileInputStream(file), defaultValues);
+		return load(file.toFile(), defaultValues);
+	}
+	
+	public Properties load(java.io.File file, Properties defaultValues) {
+		return load(() -> new FileInputStream(file), defaultValues);
 	}
 	
 	public Properties load(Callable<InputStream> stream, Properties defaultValues) {
-		Try.attempt(() -> this.load(stream.call()), () -> this.set(defaultValues));
+		Try.attempt(() -> load(stream.call()), () -> this.set(defaultValues));
 		return this;
 	}
 	
