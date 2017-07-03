@@ -410,6 +410,10 @@ public class File {
 		return new File(directory, name);
 	}
 	
+	public File file(File directory, String name) {
+		return new File(directory, name);
+	}
+	
 	public File file(java.io.File file) {
 		return new File(file);
 	}
