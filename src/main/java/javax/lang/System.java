@@ -5,6 +5,8 @@ import static javax.lang.Strings.*;
 import java.io.InputStream;
 import java.io.PrintStream;
 
+import javax.io.File;
+import javax.util.List;
 import javax.util.Map;
 import javax.util.Properties;
 
@@ -121,6 +123,10 @@ public class System {
 	
 	public static java.lang.Class<?> loadClass(String name) throws ClassNotFoundException {
 		return classloader().loadClass(name);
+	}
+	
+	public static List<File> classpath() {
+		return List.list(System.getProperties().getOrDefault("java.class.path", "").toString().split(java.io.File.pathSeparator)).map(path -> new File(path));
 	}
 	
 	public static Map<String, String> getEnvironment() {
