@@ -110,13 +110,4 @@ public class JarFile extends java.util.jar.JarFile {
 			}, Spliterator.ORDERED), false
 		);
 	}
-	
-	public static void main(String[] arguments) throws IOException {
-		@SuppressWarnings("resource")
-		JarFile jar = new JarFile("../magnum/lib/rameses-0.5.0.jar");
-		jar = new JarFile("../cilantro/target/cilantro-0.2.0.jar");
-		jar.classes().each(clazz -> System.out.println(clazz));
-		System.out.println("mains");
-		jar.mains().each(clazz -> System.out.println(clazz));
-	}
 }
