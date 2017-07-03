@@ -406,15 +406,15 @@ public class File {
 		return new File(path);
 	}
 	
-	public File file(java.io.File directory, String name) {
+	public static File file(java.io.File directory, String name) {
 		return new File(directory, name);
 	}
 	
-	public File file(File directory, String name) {
+	public static File file(File directory, String name) {
 		return new File(directory, name);
 	}
 	
-	public File file(java.io.File file) {
+	public static File file(java.io.File file) {
 		return new File(file);
 	}
 }
