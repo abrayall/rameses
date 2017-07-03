@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URL;
 
 import javax.io.Streams;
@@ -12,6 +13,10 @@ import javax.lang.Try;
 public class Urls {
 	public static URL url(String string) {
 		return Try.attempt(() -> new URL(string));
+	}
+	
+	public static URL url(URI uri) {
+		return Try.attempt(() -> uri.toURL());
 	}
 	
 	public static InputStream stream(String url) throws Exception {
