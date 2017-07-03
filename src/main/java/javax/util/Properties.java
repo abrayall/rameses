@@ -48,6 +48,10 @@ public class Properties extends java.util.Properties {
 		this(file.toFile(), defaultValues);
 	}
 	
+	public Properties(java.io.File file) {
+		this(file, Map.map());
+	}
+	
 	public Properties(java.io.File file, Properties defaultValues) {
 		this(() -> new FileInputStream(file), defaultValues);
 	}
@@ -236,6 +240,14 @@ public class Properties extends java.util.Properties {
 	}
 	
 	public static Properties properties(File file, Properties defaultValues) {
+		return new Properties(file, defaultValues);
+	}
+	
+	public static Properties properties(java.io.File file) throws Exception {
+		return new Properties(file);
+	}
+	
+	public static Properties properties(java.io.File file, Properties defaultValues) {
 		return new Properties(file, defaultValues);
 	}
 	
