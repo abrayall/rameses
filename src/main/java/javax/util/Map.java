@@ -149,7 +149,7 @@ public class Map<K, V> implements java.util.Map<K, V> {
 	}
 	
 	public Map<K, V> each(BiConsumer<K, V> action) {
-		return this.each(action);
+		return this.foreach(action);
 	}
 	
 	public Map<K, V> foreach(BiConsumer<K, V> action) {

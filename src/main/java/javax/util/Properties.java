@@ -192,7 +192,7 @@ public class Properties extends java.util.Properties {
 	}
 	
 	public Properties each(BiConsumer<Object, Object> action) {
-		return this.each(action);
+		return this.foreach(action);
 	}
 	
 	public Properties foreach(BiConsumer<Object, Object> action) {
