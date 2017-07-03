@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.concurrent.Callable;
+import java.util.function.BiConsumer;
 
 import javax.lang.Try;
 import javax.net.Urls;
@@ -187,6 +188,17 @@ public class Properties extends java.util.Properties {
 	
 	public Properties load(Callable<InputStream> stream, Properties defaultValues) {
 		Try.attempt(() -> load(stream.call()), () -> this.set(defaultValues));
+		return this;
+	}
+	
+	public Properties each(BiConsumer<Object, Object> action) {
+		return this.each(action);
+	}
+	
+	public Properties foreach(BiConsumer<Object, Object> action) {
+		for (Object key : this.keySet())
+			action.accept(key,  this.get(key));
+		
 		return this;
 	}
 	
