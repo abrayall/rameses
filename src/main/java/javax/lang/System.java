@@ -121,6 +121,14 @@ public class System {
 		return getClassloader();
 	}
 	
+	public static ClassLoader classloader(File... classpath) {
+		return new Classloader(classpath);
+	}
+	
+	public static ClassLoader classloader(List<File> classpath) {
+		return new Classloader(classpath);
+	}
+	
 	public static java.lang.Class<?> loadClass(String name) throws ClassNotFoundException {
 		return classloader().loadClass(name);
 	}
