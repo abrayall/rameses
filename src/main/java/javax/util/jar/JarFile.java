@@ -80,7 +80,7 @@ public class JarFile extends java.util.jar.JarFile {
 	}
 	
 	public List<Class<?>> mains(ClassLoader classloader) {
-		return classes().filter(clazz -> {
+		return classes(classloader).filter(clazz -> {
 			try {
 				return clazz.getMethod("main", String[].class) != null;
 			} catch (Exception e) {
