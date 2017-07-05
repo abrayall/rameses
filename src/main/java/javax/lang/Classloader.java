@@ -100,11 +100,4 @@ public class Classloader extends ClassLoader {
 		
 		return file.name();
 	}
-	
-	public static void main(String[] arguments) throws Exception {
-		Classloader classloader = new Classloader().setClasspath(System.classpath());
-		System.out.println(classloader.directories());
-		System.out.println(classloader.files(".*\\.class"));
-		System.out.println(classloader.classes());
-	}
 }
