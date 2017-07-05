@@ -113,7 +113,26 @@ public class File {
 	}
 	
 	public File parent() throws Exception {
-		return file(file.getAbsoluteFile().getParent());
+		try {
+			return file(file.getAbsoluteFile().getParent());
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public List<File> parents() throws Exception {
+		List<File> parents = List.list();
+		File parent = this.parent();
+		while (parent != null && parent.exists()) {
+			parents.add(parent);
+			parent = parent.parent();
+		}
+		
+		return parents;
+	}
+	
+	public boolean equals(Object object) {
+		return this.toString().equals(object.toString());
 	}
 	
 	public List<File> list() throws Exception {
