@@ -348,6 +348,12 @@ public class List<T> implements java.util.List<T> {
 		return this.list.stream().map(mapper).collect(Collectors.toCollection(List<M>::new));
 	}
 	
+	public <M> List<M> flatMap(Function<T, List<M>> mapper) {
+		return list(this.list.stream().flatMap(item -> {
+			return mapper.apply(item).stream();
+		}));
+	}
+	
 	public <R> R fold(R object, BiFunction<R, T, R> folder) {
 		for (T item : this.list)
 			object = folder.apply(object, item);
