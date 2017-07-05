@@ -52,8 +52,22 @@ public class Classloader extends ClassLoader {
 		}).filter(file -> file != null);
 	}
 	
+	public List<File> directories() throws Exception {
+		return this.classpath.filter(file -> file.exists() && file.isDirectory());
+	}
+	
+	public List<File> files() throws Exception {
+		return this.files(".*");
+	}
+	
+	public List<File> files(String pattern) throws Exception {
+		return list(this.classpath.stream().flatMap(file -> attempt(() -> file.search(pattern))));
+	}
+	
 	public List<java.lang.Class<?>> classes() throws Exception {
-		return list(this.jars().stream().flatMap(jar -> jar.classes(this).stream()));
+		return list(this.jars().stream().flatMap(jar -> jar.classes(this).stream())).appendAll(
+			this.files(".*\\.class").map(file -> resolve(file)).map(name -> load(name)).filter(clazz -> clazz != null)
+		);
 	}
 	
 	public List<java.lang.Class<?>> mains() throws Exception {
@@ -64,5 +78,33 @@ public class Classloader extends ClassLoader {
 				return false;
 			}
 		});
+	}
+	
+	protected java.lang.Class<?> load(String name) {
+		try {
+			return loadClass(name.replace(".class", "").replace("/", "."));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	protected String resolve(File file) {
+		try {
+			for (File parent : file.parents()) {
+				if (this.classpath.contains(parent)) {
+					return file.toString().replace(parent.toString() + java.io.File.separator, "");
+				}
+			}
+		} catch (Exception e) {}
+		
+		return file.name();
+	}
+	
+	public static void main(String[] arguments) throws Exception {
+		Classloader classloader = new Classloader().setClasspath(System.classpath());
+		System.out.println(classloader.directories());
+		System.out.println(classloader.files(".*\\.class"));
+		System.out.println(classloader.classes());
 	}
 }
