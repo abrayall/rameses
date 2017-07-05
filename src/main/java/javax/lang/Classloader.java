@@ -1,5 +1,6 @@
 package javax.lang;
 
+import static javax.io.File.*;
 import static javax.lang.Try.*;
 import static javax.util.List.*;
 
@@ -99,5 +100,17 @@ public class Classloader extends ClassLoader {
 		} catch (Exception e) {}
 		
 		return file.name();
+	}
+	
+	public static Classloader classloader(String... classpath) {
+		return classloader(list(classpath).flatMap(path -> list("")).map(path -> file(path)));
+	}
+	
+	public static Classloader classloader(File... classpath) {
+		return new Classloader(classpath);
+	}
+	
+	public static Classloader classloader(List<File> classpath) {
+		return new Classloader(classpath);
 	}
 }
