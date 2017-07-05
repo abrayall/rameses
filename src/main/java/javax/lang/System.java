@@ -154,7 +154,7 @@ public class System {
 	}
 	
 	public static String getProperty(String name) {
-		return getProperty(name, null);
+		return getProperty(null);
 	}
 	
 	public static String getProperty(String name, String defaultValue) {
