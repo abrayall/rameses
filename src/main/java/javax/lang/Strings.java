@@ -215,18 +215,18 @@ public class Strings {
 	}
 	
 	public static String format(String string, Object... parameters) {
-		return format(string, map(), parameters);
-	}
-
-	public static String format(String string, Map<String, Function<List<String>, String>> functions, Object... parameters) {
-		return new Formatter(functions).format(string, parameters);
+		return process(string, map(), List.list(parameters));
 	}
 
 	public static String format(String string, Map<String, Object> parameters) {
-		return format(string, map(), parameters);
+		return process(string, map(), parameters);
 	}
-	
-	public static String format(String string, Map<String, Function<List<String>, String>> functions, Map<String, Object> parameters){
+
+	public static String process(String string, Map<String, Function<List<String>, String>> functions, List<Object> parameters) {
+		return new Formatter(functions).format(string, parameters.toArray());
+	}
+
+	public static String process(String string, Map<String, Function<List<String>, String>> functions, Map<String, Object> parameters){
 		return new Formatter(functions).format(string, parameters);
 	}
 	
