@@ -121,11 +121,11 @@ public class System {
 		return getClassloader();
 	}
 	
-	public static ClassLoader classloader(File... classpath) {
+	public static Classloader classloader(File... classpath) {
 		return new Classloader(classpath);
 	}
 	
-	public static ClassLoader classloader(List<File> classpath) {
+	public static Classloader classloader(List<File> classpath) {
 		return new Classloader(classpath);
 	}
 	
