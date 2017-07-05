@@ -39,7 +39,7 @@ public class Urls {
 	
 	public static void download(InputStream inputStream, OutputStream outputStream) throws Exception {
 		int bytes = 0;
-		byte[] buffer = new byte[128];
+		byte[] buffer = new byte[1024];
 		
 		try {
 			while ((bytes = inputStream.read(buffer)) != -1)
