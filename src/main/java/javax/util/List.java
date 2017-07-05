@@ -98,6 +98,11 @@ public class List<T> implements java.util.List<T> {
 		
 		return this;
 	}
+	
+	public List<T> appendAll(java.util.Collection<? extends T> collection) {
+		this.list.addAll(collection);
+		return this;
+	}
 
 	@Override
 	public boolean remove(Object object) {
