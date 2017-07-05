@@ -153,6 +153,14 @@ public class System {
 		return getProperties();
 	}
 	
+	public static String getProperty(String name) {
+		return getProperty(name, null);
+	}
+	
+	public static String getProperty(String name, String defaultValue) {
+		return System.getProperties().getProperty(name, defaultValue);
+	}
+	
 	public static String operatingSystem() {
 		return java.lang.System.getProperty("os.name").toLowerCase();
 	}
