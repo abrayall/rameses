@@ -102,8 +102,14 @@ public class Classloader extends ClassLoader {
 		return file.name();
 	}
 	
+	public static List<File> classpath(String... classpath) {
+		return list(classpath).flatMap(path -> {
+			return Strings.split(path, java.io.File.separator);
+		}).map(path -> file(path));
+	}
+	
 	public static Classloader classloader(String... classpath) {
-		return classloader(list(classpath).flatMap(path -> list("")).map(path -> file(path)));
+		return classloader(classpath(classpath));
 	}
 	
 	public static Classloader classloader(File... classpath) {
