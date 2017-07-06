@@ -127,6 +127,10 @@ public class Strings {
 		return strings;
 	}
 	
+	public static List<String> split(String string, String separator) {
+		return List.list(string.split(separator));
+	}
+	
 	public static String between(String string, int start, int end) {
 		if (string.length() > start && string.length() > end)
 			return string.substring(start, end);
