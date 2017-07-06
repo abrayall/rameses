@@ -134,7 +134,7 @@ public class System {
 	}
 	
 	public static List<File> classpath() {
-		return List.list(System.getProperties().getOrDefault("java.class.path", "").toString().split(java.io.File.pathSeparator)).map(path -> new File(path));
+		return Classloader.classpath();
 	}
 	
 	public static Map<String, String> getEnvironment() {
