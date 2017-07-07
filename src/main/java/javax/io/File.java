@@ -92,16 +92,16 @@ public class File {
 		return this;
 	}
 	
-	public File copy(String source) throws Exception {
-		return this.copy(new java.io.File(source));
+	public File copy(String target) throws Exception {
+		return this.copy(new java.io.File(target));
 	}
 	
-	public File copy(java.io.File source) throws Exception {
+	public File copy(java.io.File target) throws Exception {
 		return this.copy(new File(file));
 	}
 	
-	public File copy(File source) throws Exception {
-		Files.copy(source.toPath(), this.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+	public File copy(File target) throws Exception {
+		Files.copy(this.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
 		return this;
 	}
 	
@@ -400,7 +400,7 @@ public class File {
 		
 		protected void handle(File source, File target, String operation) {
 			if (operation.equals("add") || operation.equals("modify"))
-				Try.attempt(() -> target.copy(source));
+				Try.attempt(() -> source.copy(target));
 			else if (operation.equals("delete"))
 				Try.attempt(() -> target.delete());
 			
