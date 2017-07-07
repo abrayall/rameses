@@ -131,8 +131,8 @@ public class File {
 		return parents;
 	}
 	
-	public File relative(File parent) {
-		return file(this.path().replace(parent.path(), ""));
+	public String relative(File parent) {
+		return this.path().replace(parent.path() + java.io.File.separator, "");
 	}
 	
 	public boolean equals(Object object) {
