@@ -131,6 +131,10 @@ public class File {
 		return parents;
 	}
 	
+	public File relative(File parent) {
+		return file(this.path().replace(parent.path(), ""));
+	}
+	
 	public boolean equals(Object object) {
 		return this.toString().equals(object.toString());
 	}
