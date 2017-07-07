@@ -28,6 +28,10 @@ public class Streams {
 		return target;
 	}
 	
+	public static byte[] bytes(InputStream source) throws Exception {
+		return ((ByteArrayOutputStream) copy(source, new ByteArrayOutputStream())).toByteArray();
+	}
+	
 	public static String read(InputStream source) throws Exception {
 		return copy(source, new ByteArrayOutputStream()).toString();
 	}
