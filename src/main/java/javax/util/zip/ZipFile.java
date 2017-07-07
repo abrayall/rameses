@@ -89,6 +89,14 @@ public class ZipFile extends java.util.zip.ZipFile {
 		return new ZipFile(file);
 	}
 	
+	public static File unzip(File file, File path) throws Exception {
+		return extract(file, path);
+	}
+	
+	public static File unzip(File file, File path, BiConsumer<ZipEntry, File> progress) throws Exception {
+		return extract(file, path, progress);
+	}
+	
 	public static File extract(File file, File path) throws Exception {
 		return extract(file, path, (e, f) -> {});
 	}
