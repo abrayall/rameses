@@ -104,6 +104,10 @@ public class ZipFile extends java.util.zip.ZipFile {
 		return extract(file, path, progress);
 	}
 	
+	public static File unzip(File file, File path, BiFunction<ZipEntry, File, File> handler) throws Exception {
+		return extract(file, path, handler);
+	}
+	
 	public static File extract(File file, File path) throws Exception {
 		return extract(file, path, (e, f) -> {});
 	}
@@ -115,8 +119,8 @@ public class ZipFile extends java.util.zip.ZipFile {
 		});
 	}
 	
-	public static File extract(File file, File path, BiFunction<ZipEntry, File, File> progress) throws Exception {
-		zip(file).extract(path, progress).close();
+	public static File extract(File file, File path, BiFunction<ZipEntry, File, File> handler) throws Exception {
+		zip(file).extract(path, handler).close();
 		return path;
 	}
 }
