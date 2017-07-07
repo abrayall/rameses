@@ -31,6 +31,10 @@ public class Urls {
 		return url(url).openConnection();
 	}
 	
+	public static URLConnection connection(URL url) throws Exception {
+		return url.openConnection();
+	}
+	
 	public static String get(String url) throws Exception {
 		return Streams.read(stream(url));
 	}
@@ -46,9 +50,17 @@ public class Urls {
 	public static File download(String url, java.io.File path, BiConsumer<Long, Long> progress) throws Exception {
 		return download(connection(url), file(path), progress);
 	}
+
+	public static File download(URL url, File path, BiConsumer<Long, Long> progress) throws Exception {
+		return download(connection(url), path, progress);
+	}
 	
 	public static File download(String url, File path, BiConsumer<Long, Long> progress) throws Exception {
 		return download(connection(url), path, progress);
+	}
+	
+	public static File download(URL url, File path) throws Exception {
+		return download(url, path, (bytes, size) -> {});
 	}
 	
 	public static File download(URLConnection connection, File path) throws Exception {
