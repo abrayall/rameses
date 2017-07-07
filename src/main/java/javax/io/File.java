@@ -162,9 +162,6 @@ public class File {
 			
 			return filter.apply(file) == true ? Stream.of(file) : Stream.empty();	
 		});
-		//return Files.find(this.file.toPath(), Integer.MAX_VALUE, (path, attributes) -> {
-		//	return filter.apply(new File(path.toFile()));
-		//}, FileVisitOption.FOLLOW_LINKS).map(path -> new File(path.toFile()));
 	}
 	
 	public long latest() throws Exception {
@@ -177,6 +174,10 @@ public class File {
 	
 	public String read() throws Exception {
 		return Streams.read(this.inputStream());
+	}
+	
+	public byte[] bytes() throws Exception {
+		return Streams.bytes(this.inputStream());
 	}
 	
 	public OutputStream outputStream() throws Exception {
