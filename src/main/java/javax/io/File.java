@@ -101,7 +101,13 @@ public class File {
 	}
 	
 	public File copy(File target) throws Exception {
-		Files.copy(this.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+		if (this.isDirectory() == false)
+			Files.copy(this.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+		else {
+			for (File file : this.list()) 
+				file.copy(file(target, file.name()).mkdirs());
+		}
+	
 		return this;
 	}
 	
