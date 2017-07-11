@@ -14,7 +14,7 @@ public class Streams {
 	
 	public static OutputStream copy(InputStream source, OutputStream target, boolean shouldClose) throws Exception {
 		int bytes = 0;
-		byte[] buffer = new byte[1024];
+		byte[] buffer = new byte[8096];
 		
 		try {
 			while ((bytes = source.read(buffer)) != -1)
