@@ -2,13 +2,14 @@ package javax.util;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 
+import javax.io.File;
 import javax.lang.Try;
 import javax.net.Urls;
-import javax.io.File;
 
 @SuppressWarnings("serial")
 public class Properties extends java.util.Properties {
@@ -164,6 +165,16 @@ public class Properties extends java.util.Properties {
 		return this;
 	}
 	
+	public Properties set(String key, Object value) {
+		this.put(key, value);
+		return this;
+	}
+	
+	public Properties delete(Object key) {
+		this.remove(key);
+		return this;
+	}
+	
 	public Properties load(InputStream stream, Properties defaultValues) {
 		Try.attempt(() -> this.load(stream), () -> this.set(defaultValues));
 		return this;
@@ -193,6 +204,19 @@ public class Properties extends java.util.Properties {
 	public Properties load(Callable<InputStream> stream, Properties defaultValues) {
 		Try.attempt(() -> load(stream.call()), () -> this.set(defaultValues));
 		return this;
+	}
+	
+	public Properties store(OutputStream stream) throws Exception {
+		this.store(stream, "");
+		return this;
+	}
+	
+	public Properties store(File file) throws Exception {
+		return store(file.outputStream());
+	}
+	
+	public Properties store(java.io.File file) throws Exception {
+		return store(File.file(file));
 	}
 	
 	public Properties each(BiConsumer<Object, Object> action) {
