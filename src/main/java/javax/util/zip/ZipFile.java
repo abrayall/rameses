@@ -77,7 +77,7 @@ public class ZipFile extends java.util.zip.ZipFile {
 		return this;
 	}
 	
-	public ZipFile delete(ZipEntry entry) throws Exception {
+	public ZipFile delete(ZipEntry entry) throws Exception { 
 		return delete(entry.getName());
 	}
 	

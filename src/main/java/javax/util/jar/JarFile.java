@@ -102,7 +102,7 @@ public class JarFile extends java.util.jar.JarFile {
 		return new URLClassLoader(new URL[] { url(this.file.toFile().toURI()) });
 	}
 	
-	public JarFile delete(JarEntry entry) throws Exception {
+	public JarFile delete(JarEntry entry) throws Exception { 
 		return delete(entry.getName());
 	}
 
