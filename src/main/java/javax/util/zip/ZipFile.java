@@ -2,7 +2,12 @@ package javax.util.zip;
 
 import static javax.io.File.*;
 import static javax.io.Streams.*;
+import static javax.util.Map.*;
 
+import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -15,19 +20,21 @@ import java.util.zip.ZipEntry;
 
 import javax.io.File;
 
-
 public class ZipFile extends java.util.zip.ZipFile {
 
+	protected File file;
+	
 	public ZipFile(String path) throws Exception {
 		this(file(path));
 	}
 	
-	public ZipFile(File file) throws Exception {
-		this(file.toFile());
+	public ZipFile(java.io.File file) throws Exception {
+		this(file(file));
 	}
 
-	public ZipFile(java.io.File file) throws Exception {
-		super(file);
+	public ZipFile(File file) throws Exception {
+		super(file.toFile());
+		this.file = file;
 	}
 	
 	public ZipFile extract(java.io.File path) throws Exception {
@@ -66,6 +73,14 @@ public class ZipFile extends java.util.zip.ZipFile {
 			path.mkdirs();
 		else if (entry != null)
 			copy(this.getInputStream(entry), path.mkdirs().outputStream()).close();
+		
+		return this;
+	}
+	
+	public ZipFile delete(String name) throws Exception {
+		try (FileSystem filesystem = FileSystems.newFileSystem(new URI("jar:file://" + file), map())) {
+		    Files.delete(filesystem.getPath(name));
+		}	
 		
 		return this;
 	}
@@ -122,5 +137,9 @@ public class ZipFile extends java.util.zip.ZipFile {
 	public static File extract(File file, File path, BiFunction<ZipEntry, File, File> handler) throws Exception {
 		zip(file).extract(path, handler).close();
 		return path;
+	}
+	
+	public static void main(String[] arguments) throws Exception {
+		zip(file("/tmp/test.zip")).delete("/simpliprotected/website/next.php");
 	}
 }
