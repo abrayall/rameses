@@ -2,8 +2,12 @@ package javax.util.jar;
 
 import javax.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -17,6 +21,7 @@ import javax.lang.System;
 import javax.util.List;
 
 import static javax.net.Urls.*;
+import static javax.util.Map.*;
 import static javax.io.File.*;
 
 public class JarFile extends java.util.jar.JarFile {
@@ -95,6 +100,18 @@ public class JarFile extends java.util.jar.JarFile {
 	
 	public ClassLoader classloader(ClassLoader parent) {
 		return new URLClassLoader(new URL[] { url(this.file.toFile().toURI()) });
+	}
+	
+	public JarFile delete(JarEntry entry) throws Exception {
+		return delete(entry.getName());
+	}
+
+	public JarFile delete(String name) throws Exception {
+		try (FileSystem filesystem = FileSystems.newFileSystem(new URI("jar:file://" + file), map())) {
+		    Files.delete(filesystem.getPath(name));
+		}	
+		
+		return this;
 	}
 	
 	protected <T> Stream<T> stream(Enumeration<T> e) {
