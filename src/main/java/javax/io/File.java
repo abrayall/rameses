@@ -168,7 +168,7 @@ public class File {
 		return this.list().parallelStream().flatMap(path -> {
 			File file = new File(path.toFile());
 			if (file.isDirectory()) 
-				return Try.attempt(() -> file.search(filter));
+				return filter.apply(file) == true ? Try.attempt(() -> file.search(filter)) : Stream.empty();
 			
 			return filter.apply(file) == true ? Stream.of(file) : Stream.empty();	
 		});
