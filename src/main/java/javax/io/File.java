@@ -111,6 +111,15 @@ public class File {
 		return this;
 	}
 	
+	public File rename(String name) throws Exception {
+		return this.rename(file(this.parent(), name));
+	}
+	
+	public File rename(File file) throws Exception {
+		this.file.renameTo(file.toFile());
+		return this;
+	}
+	
 	public File mkdirs() throws Exception {
 		if (this.file.getParentFile() != null) 
 			this.file.getParentFile().mkdirs();
