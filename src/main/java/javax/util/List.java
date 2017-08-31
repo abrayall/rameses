@@ -213,6 +213,11 @@ public class List<T> implements java.util.List<T> {
 		return this;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<T> without(T... objects) {
+		return this.clone().delete(objects);
+	}
+	
 	@Override
 	public int indexOf(Object object) {
 		return this.list.indexOf(object);
