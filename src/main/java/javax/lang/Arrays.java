@@ -5,6 +5,11 @@ import java.lang.reflect.Array;
 public class Arrays {
 	
 	@SafeVarargs
+	public static <T> T[] array(T... array) {
+		return array;
+	}
+	
+	@SafeVarargs
 	public static <T> T[] append(T[] base, T... others) {
 		return concat(base, others);
 	}
