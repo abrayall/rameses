@@ -1,21 +1,15 @@
 package javax.lang;
 
-import java.util.LinkedHashMap;
-import javax.util.Map;
-
 import static javax.util.Map.*;
+
+import java.util.LinkedHashMap;
+
+import javax.util.Map;
 
 /**
  * Helper class that provides convenience methods for dealing with numbers
  */
 public class Numbers {
-	
-	private static final Long thousand    = 1000l;
-	private static final Long million     = thousand * thousand;
-	private static final Long billion     = million * thousand;
-	private static final Long trillion    = billion * thousand;
-	private static final Long quadrillion = trillion * thousand;
-	private static final Long quintillion = quadrillion * thousand;
 	
 	private static Map<String, WordFormatter> formatters = map(
 		entry("english", new EnglishWordFormatter())
@@ -106,38 +100,44 @@ public class Numbers {
 		private static final String[] TENS = {"ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
 		private static final String[] SPECIALS = Arrays.concat(ONES, new String[] {"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"});
 
-		private static final Map<String, Long> scales = map(new LinkedHashMap<String, Long>(),
-			entry("quintillion", quintillion),
-			entry("quadrillion", quadrillion),
-			entry("trillion", trillion),
-			entry("billion", billion),
-			entry("million", million),
-			entry("thousand", thousand)
-		);
+		private static final Map<String, Long> scales = map(new LinkedHashMap<String, Long>(), 
+			entry("quintillion", 1000000000000000000l),
+			entry("quadrillion", 1000000000000000l),
+			entry("trillion",    1000000000000l),
+			entry("billion",     1000000000l),
+			entry("million",     1000000l),
+			entry("thousand",    1000l)
+		);	
 		
-		/*
-		 * (non-Javadoc)
-		 * @see javax.lang.Numbers.WordFormatter#toWords(java.lang.Long)
+		
+		/**
+		 * Converts a number to a string containing the words describing the number
+		 * @param number the number to convert
+		 * @return a string containing the word version describing the given number
 		 */
-		@Override
+		public String toWords(Integer number) {
+			return toWords(number.longValue());
+		}
+		
+		
+		/**
+		 * Converts a number to a string containing the words describing the number
+		 * @param number the number to convert
+		 * @return a string containing the word version describing the given number
+		 */
 		public String toWords(Long number) {
 			StringBuffer buffer = new StringBuffer(number < 0 ? "negative " : "");
 			
 			long absolute = Math.abs(number);
-			if (absolute < 19)
-				buffer.append(SPECIALS[toInteger(absolute)]);
-			else {
-				for (String name : scales.keySet()) {
-					Long scale = scales.get(name);
-					if (absolute > scale) {
-						buffer.append(format(toInteger(absolute / scale), name, false) + " ");
-						absolute = absolute - ((absolute / scale) * scale);
-					}
+			for (String name : scales.keySet()) {
+				Long scale = scales.get(name);
+				if (absolute >= scale) {
+					buffer.append(format(new Long(absolute / scale).intValue(), name, false) + " ");
+					absolute = absolute - ((absolute / scale) * scale);
 				}
-				
-				buffer.append(format(toInteger(absolute), "", true));
 			}
-
+			
+			if (absolute > 0 || absolute == number) buffer.append(format(new Long(absolute).intValue(), "", true));
 			return buffer.toString().trim();
 		}
 		
@@ -168,10 +168,13 @@ public class Numbers {
 		 */
 		protected String format(int hundreds, int tens, int ones, String scale, boolean and) {
 			StringBuffer buffer = new StringBuffer();
+			if (hundreds == 0 && tens == 0 && ones == 0) 
+				buffer.append(ONES[0]);
+			
 			if (hundreds > 0)
 				buffer.append(ONES[hundreds] + " hundred ");
 			
-			if (tens > 1 && ones > 0 && and)
+			if (hundreds > 0 && (tens > 0 || ones > 0) && and)
 				buffer.append("and ");
 			
 			if (tens == 1)
@@ -188,7 +191,7 @@ public class Numbers {
 			}
 			
 			buffer.append(" " + scale);
-			return buffer.toString().trim();
+			return buffer.toString().replace("  ", " ").trim();
 		}
 	}
 }
