@@ -1,9 +1,7 @@
 package javax.util;
 
-import static javax.lang.Assert.check;
-import static javax.lang.Assert.isEqual;
-import static javax.util.List.list;
-import static javax.util.List.synchronize;
+import static javax.lang.Assert.*;
+import static javax.util.List.*;
 
 public class ListTest {
 
@@ -69,7 +67,18 @@ public class ListTest {
 		check(list.get(0) == "3");
 	}
 	
+	public void testClone() throws Exception {
+		List<String> original = list();
+		isEqual(0, original.clone().size());
+		
+		original.add("foo");
+		original.add("bar");
+		isEqual(2, original.clone().size());
+	}
+	
 	public static void main(String[] arguments) throws Exception {
-		new ListTest().testList();
+		ListTest test = new ListTest();
+		test.testList();
+		test.testClone();
 	}
 }

@@ -259,7 +259,7 @@ public class List<T> implements java.util.List<T> {
 	public List<T> clone() {
 		List<T> list = list();
 		for (int i = 0; i < this.list.size(); i++)
-			list.put(i, this.list.get(i));
+			list.add(i, this.list.get(i));
 		
 		return list;
 	}
