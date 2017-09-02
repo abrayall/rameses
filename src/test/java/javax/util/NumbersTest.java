@@ -5,10 +5,10 @@ import javax.lang.Numbers;
 
 public class NumbersTest {
 	public static void main(String[] arguments) throws Exception {
-		new NumbersTest().test();
+		new NumbersTest().testNumbers();
 	}
 	
-	public void test() throws Exception {
+	public void testNumbers() throws Exception {
 		Assert.equals("zero", Numbers.toWords(0));
 		Assert.equals("zero", Numbers.toWords(-0));
 		Assert.equals("one", Numbers.toWords(1));
