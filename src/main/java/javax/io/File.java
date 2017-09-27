@@ -456,4 +456,20 @@ public class File {
 	public static File file(java.io.File file) {
 		return new File(file);
 	}
+	
+	public static boolean exists(java.io.File directory, String name) {
+		return exists(file(directory, name));
+	}
+	
+	public static boolean exists(File directory, String name) {
+		return exists(file(directory, name));
+	}
+	
+	public static boolean exists(String path) {
+		return exists(file(path));
+	}
+	
+	public static boolean exists(File file) {
+		return file.exists();
+	}
 }
