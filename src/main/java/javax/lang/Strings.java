@@ -44,8 +44,12 @@ public class Strings {
 	}
 	
 	public static String join(String[] strings, String start, String seperator, String end) {
+		return join(strings, 0, strings.length, start, seperator, end);
+	}
+	
+	public static String join(String[] strings, int begin, int stop, String start, String seperator, String end) {
 		StringBuffer buffer = new StringBuffer(start);
-		for (int i = 0; i < strings.length; i++) {
+		for (int i = begin; i < stop; i++) {
 			buffer.append(strings[i]);
 			if (i < strings.length - 1)
 				buffer.append(seperator);
